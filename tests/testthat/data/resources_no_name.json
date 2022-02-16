@@ -1,0 +1,10 @@
+{
+  "resources": [
+    {
+      "not_a_name": "deployments"
+    },
+    {
+      "name": "observations"
+    }
+  ]
+}
