@@ -1,6 +1,13 @@
+# frictionless (development version)
+
+# frictionless 1.0.1
+
+- Rebuild documentation for compatibility with HTML5 on request of CRAN.
+- Add funder information.
+
 # frictionless 1.0.0
 
-- First release on CRAN.
+- First release on [CRAN](https://cran.r-project.org/package=frictionless). 🎉
 - Files (`datapackage.json`, resource files, schemas) can now be read from
   `(s)ftp://` URLs (#102).
 - Package website is now served from <https://docs.ropensci.org/frictionless/>.

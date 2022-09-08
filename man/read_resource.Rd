@@ -76,7 +76,9 @@ The returned data frame will always be UTF-8.
 the resource file(s) deviate from the default CSV settings (see below).
 It can either be a JSON object or a path or URL referencing a JSON object.
 Only deviating properties need to be specified, e.g. a tab delimited file
-without a header row needs:\if{html}{\out{<div class="sourceCode json">}}\preformatted{"dialect": \{"delimiter": "\\t", "header": "false"\}
+without a header row needs:
+
+\if{html}{\out{<div class="sourceCode json">}}\preformatted{"dialect": \{"delimiter": "\\t", "header": "false"\}
 }\if{html}{\out{</div>}}
 
 These are the CSV dialect properties.
@@ -188,8 +190,8 @@ Can be parsed afterwards with \code{\link[lubridate:duration]{lubridate::duratio
 \item \href{https://specs.frictionlessdata.io/table-schema/#geojson}{geojson} as
 \code{character}.
 \item \href{https://specs.frictionlessdata.io/table-schema/#any}{any} as \code{character}.
-\item no type provided as type is guessed.
-\item unknown type as not allowed.
+\item Any other value is not allowed.
+\item Type is guessed when not provided.
 }
 }
 }

@@ -28,6 +28,7 @@
     </style>
 
 
+
 <style type="text/css">
   code {
     white-space: pre;
@@ -40,6 +41,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -108,13 +110,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -147,7 +156,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="what-is-a-data-package" class="section level2">
 <h2>What is a Data Package?</h2>
 <p>A <a href="https://specs.frictionlessdata.io/data-package/">Data Package</a> is a simple container format to describe and package a collection of (tabular) data. It is typically used to publish FAIR and open datasets. In this tutorial we will show you how to read, create, edit and write Data Packages with the <strong>R pkg frictionless</strong>.</p>
-<p><strong>package</strong> vs <strong>pkg</strong>: in the Frictionless Data community <code>package</code> refers to a Data Package, while in R that is a software package In this tutorial we will use <code>pkg</code> to refer to the latter.</p>
+<p><strong>package</strong> vs <strong>pkg</strong>: in the Frictionless Data community <code>package</code> refers to a Data Package, while in R that is a software package. In this tutorial we will use <code>pkg</code> to refer to the latter.</p>
 </div>
 <div id="read-a-data-package" class="section level2">
 <h2>Read a Data Package</h2>
@@ -187,25 +196,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>gps <span class="ot">&lt;-</span> <span class="fu">read_resource</span>(package, <span class="st">&quot;gps&quot;</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>gps</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 73,047 × 21</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     `event-id` visible timestamp           `location-long` `location-lat`</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;          &lt;dbl&gt; &lt;lgl&gt;   &lt;dttm&gt;                        &lt;dbl&gt;          &lt;dbl&gt;</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 14256075762 TRUE    2018-05-25 16:11:37            4.25           51.3</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 14256075763 TRUE    2018-05-25 16:16:41            4.25           51.3</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 14256075764 TRUE    2018-05-25 16:21:29            4.25           51.3</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 14256075765 TRUE    2018-05-25 16:26:28            4.25           51.3</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 14256075766 TRUE    2018-05-25 16:31:21            4.25           51.3</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 14256075767 TRUE    2018-05-25 16:36:09            4.25           51.3</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 14256075768 TRUE    2018-05-25 16:40:57            4.25           51.3</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 14256075769 TRUE    2018-05-25 16:45:55            4.25           51.3</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 14256075770 TRUE    2018-05-25 16:50:49            4.25           51.3</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 14256075771 TRUE    2018-05-25 16:55:36            4.25           51.3</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 73,037 more rows, and 16 more variables:</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `bar:barometric-pressure` &lt;dbl&gt;, `external-temperature` &lt;dbl&gt;,</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `gps:dop` &lt;dbl&gt;, `gps:satellite-count` &lt;dbl&gt;, `gps-time-to-fix` &lt;dbl&gt;,</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `ground-speed` &lt;dbl&gt;, heading &lt;dbl&gt;, `height-above-msl` &lt;dbl&gt;,</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `location-error-numerical` &lt;dbl&gt;, `manually-marked-outlier` &lt;lgl&gt;,</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `vertical-error-numerical` &lt;dbl&gt;, `sensor-type` &lt;chr&gt;,</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `individual-taxon-canonical-name` &lt;chr&gt;, `tag-local-identifier` &lt;chr&gt;, …</span></span></code></pre></div>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    event-i…¹ visible timestamp           locat…² locat…³ bar:b…⁴ exter…⁵ gps:d…⁶</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        &lt;dbl&gt; &lt;lgl&gt;   &lt;dttm&gt;                &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1   1.43e10 TRUE    2018-05-25 16:11:37    4.25    51.3      NA    32.5     2  </span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2   1.43e10 TRUE    2018-05-25 16:16:41    4.25    51.3      NA    32.8     2.1</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3   1.43e10 TRUE    2018-05-25 16:21:29    4.25    51.3      NA    34.1     2.1</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4   1.43e10 TRUE    2018-05-25 16:26:28    4.25    51.3      NA    34.5     2.2</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5   1.43e10 TRUE    2018-05-25 16:31:21    4.25    51.3      NA    34.1     2.2</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6   1.43e10 TRUE    2018-05-25 16:36:09    4.25    51.3      NA    32.5     2.2</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7   1.43e10 TRUE    2018-05-25 16:40:57    4.25    51.3      NA    32.1     2.2</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8   1.43e10 TRUE    2018-05-25 16:45:55    4.25    51.3      NA    33.3     2.1</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9   1.43e10 TRUE    2018-05-25 16:50:49    4.25    51.3      NA    32.6     2.1</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10   1.43e10 TRUE    2018-05-25 16:55:36    4.25    51.3      NA    31.7     2  </span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with 73,037 more rows, 13 more variables: `gps:satellite-count` &lt;dbl&gt;,</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `gps-time-to-fix` &lt;dbl&gt;, `ground-speed` &lt;dbl&gt;, heading &lt;dbl&gt;,</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `height-above-msl` &lt;dbl&gt;, `location-error-numerical` &lt;dbl&gt;,</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `manually-marked-outlier` &lt;lgl&gt;, `vertical-error-numerical` &lt;dbl&gt;,</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `sensor-type` &lt;chr&gt;, `individual-taxon-canonical-name` &lt;chr&gt;,</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `tag-local-identifier` &lt;chr&gt;, `individual-local-identifier` &lt;chr&gt;,</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; #   `study-name` &lt;chr&gt;, and abbreviated variable names ¹​`event-id`, …</span></span></code></pre></div>
 <p>The data frame contains all GPS records, even though the actual data were split over <a href="https://zenodo.org/record/5879096#files">multiple CSV zipped files</a>. <code>read_resource()</code> assigned the column names and types based on the Table Schema that was defined for that resource, not the headers of the CSV file.</p>
 <p>You can also read data from a local (e.g. downloaded) Data Package. In fact, there is one included in the frictionless pkg, let’s read that one from disk:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>local_package <span class="ot">&lt;-</span> <span class="fu">read_package</span>(</span>
@@ -215,11 +224,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Follow applicable norms or requirements to credit the dataset and its authors.</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">read_resource</span>(local_package, <span class="st">&quot;media&quot;</span>)</span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 5</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   media_id                      deployment_id observation_id timestamp file_path</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                         &lt;chr&gt;         &lt;chr&gt;          &lt;chr&gt;     &lt;chr&gt;    </span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 aed5fa71-3ed4-4284-a6ba-3550… 1             1-1            2020-09-… https://…</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 da81a501-8236-4cbd-aa95-4bc4… 1             1-1            2020-09-… https://…</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 0ba57608-3cf1-49d6-a5a2-fe68… 1             1-1            2020-09-… https://…</span></span></code></pre></div>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   media_id                             deployment_id observati…¹ times…² file_…³</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                                &lt;chr&gt;         &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;  </span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 aed5fa71-3ed4-4284-a6ba-3550d1a4de8d 1             1-1         2020-0… https:…</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 da81a501-8236-4cbd-aa95-4bc4b10a05df 1             1-1         2020-0… https:…</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 0ba57608-3cf1-49d6-a5a2-fe680851024d 1             1-1         2020-0… https:…</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # … with abbreviated variable names ¹​observation_id, ²​timestamp, ³​file_path</span></span></code></pre></div>
 <p>Data from the <code>media</code> was not stored in a CSV file, but directly in the <code>data</code> property of that resource in <code>datapackage.json</code>. <code>read_resource()</code> will automatically detect where to read data from.</p>
 </div>
 <div id="create-and-edit-a-data-package" class="section level2">
@@ -393,7 +403,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4] &quot;observations_2.csv&quot;</span></span></code></pre></div>
 <p>The frictionless pkg does not provide functionality to deposit your Data Package on a research repository such as <a href="https://zenodo.org">Zenodo</a>, but here are some tips:</p>
 <ol style="list-style-type: decimal">
-<li>Validate your Data Package before depositing. You can do this in Python with the <a href="https://github.com/frictionlessdata/frictionless-py">Frictionless Framework</a> using <code>frictionless validate datapackage.json</code>.</li>
+<li>Validate your Data Package before depositing. You can do this in Python with the <a href="https://github.com/frictionlessdata/framework">Frictionless Framework</a> using <code>frictionless validate datapackage.json</code>.</li>
 <li>Zip the individual CSV files (and update their paths in <code>datapackage.json</code>) to reduce size, not the entire Data Package. That way, users still have direct access to the <code>datapackage.json</code> file. See <a href="https://zenodo.org/record/5061303#files">this example</a>.</li>
 <li>Only describe the technical aspects of your dataset in <code>datapackage.json</code> (fields, units, the dataset identifier in <code>id</code>). Authors, methodology, license, etc. are better described in the metadata fields the research repository provides.</li>
 </ol>
