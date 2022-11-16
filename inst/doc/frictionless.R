@@ -8,25 +8,6 @@ knitr::opts_chunk$set(
 library(frictionless)
 
 ## -----------------------------------------------------------------------------
-package <- read_package("https://zenodo.org/record/5879096/files/datapackage.json")
-
-## -----------------------------------------------------------------------------
-str(package, list.len = 3)
-
-## -----------------------------------------------------------------------------
-resources(package)
-
-## -----------------------------------------------------------------------------
-gps <- read_resource(package, "gps")
-gps
-
-## -----------------------------------------------------------------------------
-local_package <- read_package(
-  system.file("extdata", "datapackage.json", package = "frictionless")
-)
-read_resource(local_package, "media")
-
-## -----------------------------------------------------------------------------
 # Show content of the data frame "iris"
 dplyr::as_tibble(iris)
 
@@ -88,25 +69,12 @@ my_package <-
   )
 
 ## -----------------------------------------------------------------------------
-# Two CSV files with the same structure
-path_1 <- system.file("extdata", "observations_1.csv", package = "frictionless")
-path_2 <- system.file("extdata", "observations_2.csv", package = "frictionless")
-
-# Add both CSV files as a single resource
-my_package <-
-  my_package %>%
-  add_resource(resource_name = "observations", data = c(path_1, path_2))
-
-## -----------------------------------------------------------------------------
 my_package <- append(my_package, c(name = "my_package"), after = 0)
 # Or with purrr::prepend(): prepend(my_package, c(name = "my_package))
 my_package <- append(my_package, c(title = "My package"), after = 1)
 
 ## -----------------------------------------------------------------------------
 write_package(my_package, "my_directory")
-
-## -----------------------------------------------------------------------------
-list.files("my_directory")
 
 ## ---- include = FALSE---------------------------------------------------------
 unlink("my_directory", recursive = TRUE)

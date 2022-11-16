@@ -1,6 +1,6 @@
 Package: frictionless
 Title: Read and Write Frictionless Data Packages
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(
     person("Peter", "Desmet", email = "peter.desmet.work@gmail.com",
            role = c("aut", "cre"), comment = c(ORCID = "0000-0002-8442-8025")),
@@ -33,7 +33,7 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.1
 NeedsCompilation: no
-Packaged: 2022-09-07 19:56:30 UTC; peter_desmet
+Packaged: 2022-11-16 21:03:35 UTC; peter_desmet
 Author: Peter Desmet [aut, cre] (<https://orcid.org/0000-0002-8442-8025>),
   Damiano Oldoni [aut] (<https://orcid.org/0000-0003-3445-7562>),
   Research Institute for Nature and Forest (INBO) [cph]
@@ -44,4 +44,4 @@ Author: Peter Desmet [aut, cre] (<https://orcid.org/0000-0002-8442-8025>),
 Maintainer: Peter Desmet <peter.desmet.work@gmail.com>
 Depends: R (>= 3.5.0)
 Repository: CRAN
-Date/Publication: 2022-09-08 08:02:56 UTC
+Date/Publication: 2022-11-16 22:20:06 UTC
