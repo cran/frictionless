@@ -1,7 +1,7 @@
-fe6a35bedccbcd33855f9fd345b59ca0 *DESCRIPTION
+33bc435a59b1bf7aed541a788899c422 *DESCRIPTION
 c0f4ec5ac062da31226b7c089b34e35e *LICENSE
 0a76d1afd8ddadc39d59a8c82b04e0e9 *NAMESPACE
-bdbe53bf2be2282722c3a99bdc868c69 *NEWS.md
+98271a8b17202006ada2c6002a25fb8f *NEWS.md
 4839d7d931ef1081858e36893db345c5 *R/add_resource.R
 8f7e31f0100e3fb6915610a277804644 *R/check_package.R
 61629ca240e9c0f0fccb72b9a6bb553f *R/check_schema.R
@@ -19,12 +19,12 @@ d64f9300bcf0224ca64c66fe352e28ae *R/utils.R
 e6440e0feb0a13a6c1abbb0ba1c1b8e1 *R/write_package.R
 97cc7bb37afb4338ba339dd9e94e36b6 *R/write_resource.R
 307c3b7bb7a47a7adac6ca29e587c2c6 *README.md
-09b12fe1a66191fddc8cbc92f45999fe *build/vignette.rds
+9774c6ced7f68e4a6bd42b72c5e7288a *build/vignette.rds
 9015f5b77e35c233f1af6bcc14f4463d *data/example_package.rda
 145bfe081776b2170e83fd15479de86b *inst/CITATION
-d1e7bcacd4b0492eb980f1d7e97168ee *inst/doc/frictionless.R
-19443f70591561906d2c808eebe261b9 *inst/doc/frictionless.Rmd
-05804cffb01bf4d64b6a5d464431a3b1 *inst/doc/frictionless.html
+5d72c48e7edcbe1f57f6e97f7c926f25 *inst/doc/frictionless.R
+6e50fad37ce1681e03a3330e406f47c6 *inst/doc/frictionless.Rmd
+6665293abfd7de17a163f6d3e41dc926 *inst/doc/frictionless.html
 52bc01af0456502b941a88c685756d0f *inst/extdata/datapackage.json
 d224c6e12ee41a8b0c3b3803e98a8b1b *inst/extdata/deployments.csv
 ae59cf9e1d7ebe30f0ed8cfed9dc084d *inst/extdata/observations_1.csv
@@ -86,4 +86,4 @@ a4dbd90ffe2770b3f313f9dfb27b5478 *tests/testthat/test-read_resource.R
 1d9c94c37d4821a7398abdf791387d04 *tests/testthat/test-resources.R
 45e1e347eb41a5caaae5f99786e88771 *tests/testthat/test-utils.R
 443b6d73587544d9a566814596c888bc *tests/testthat/test-write_package.R
-19443f70591561906d2c808eebe261b9 *vignettes/frictionless.Rmd
+6e50fad37ce1681e03a3330e406f47c6 *vignettes/frictionless.Rmd

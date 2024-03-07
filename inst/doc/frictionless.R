@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -76,6 +76,6 @@ my_package <- append(my_package, c(title = "My package"), after = 1)
 ## -----------------------------------------------------------------------------
 write_package(my_package, "my_directory")
 
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 unlink("my_directory", recursive = TRUE)
 
