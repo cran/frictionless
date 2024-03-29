@@ -14,12 +14,11 @@
 #'   data are written to a CSV file using [readr::write_csv()], `path` points to
 #'   location of file, `data` property is removed.
 #'   Use `compress = TRUE` to gzip those CSV files.
-#' @param package List describing a Data Package, created with [read_package()]
-#'   or [create_package()].
+#' @inheritParams read_resource
 #' @param directory Path to local directory to write files to.
 #' @param compress If `TRUE`, data of added resources will be gzip compressed
 #'   before being written to disk (e.g. `deployments.csv.gz`).
-#' @return `package` as written to file (invisibly).
+#' @return `package` invisibly, as written to file.
 #' @family write functions
 #' @export
 #' @examples
@@ -28,8 +27,7 @@
 #'   system.file("extdata", "datapackage.json", package = "frictionless")
 #' )
 #'
-#' # List resources
-#' resources(package)
+#' package
 #'
 #' # Write the (unchanged) Data Package to disk
 #' write_package(package, directory = "my_directory")
@@ -47,13 +45,15 @@ write_package <- function(package, directory = ".", compress = FALSE) {
   check_package(package)
 
   # Check resources
-  assertthat::assert_that(
-    length(package$resources) != 0, # Null or empty list
-    msg = glue::glue(
-      "`package` must have resources. Use `add_resource()` to add resources.",
-      .sep = " "
+  if (length(package$resources) == 0) {
+    cli::cli_abort(
+      c(
+        "{.arg package} must have resources.",
+        "i" = "Use {.fun add_resource} to add resources."
+      ),
+      class = "frictionless_error_package_without_resources"
     )
-  )
+  }
 
   # Create directory if it doesn't exists yet
   if (!dir.exists(directory)) {

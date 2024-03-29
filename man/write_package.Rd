@@ -7,8 +7,8 @@
 write_package(package, directory = ".", compress = FALSE)
 }
 \arguments{
-\item{package}{List describing a Data Package, created with \code{\link[=read_package]{read_package()}}
-or \code{\link[=create_package]{create_package()}}.}
+\item{package}{Data Package object, created with \code{\link[=read_package]{read_package()}} or
+\code{\link[=create_package]{create_package()}}.}
 
 \item{directory}{Path to local directory to write files to.}
 
@@ -16,7 +16,7 @@ or \code{\link[=create_package]{create_package()}}.}
 before being written to disk (e.g. \code{deployments.csv.gz}).}
 }
 \value{
-\code{package} as written to file (invisibly).
+\code{package} invisibly, as written to file.
 }
 \description{
 Writes a Data Package and its related Data Resources to disk as a
@@ -42,8 +42,7 @@ package <- read_package(
   system.file("extdata", "datapackage.json", package = "frictionless")
 )
 
-# List resources
-resources(package)
+package
 
 # Write the (unchanged) Data Package to disk
 write_package(package, directory = "my_directory")

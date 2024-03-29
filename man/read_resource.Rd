@@ -4,16 +4,23 @@
 \alias{read_resource}
 \title{Read data from a Data Resource into a tibble data frame}
 \usage{
-read_resource(package, resource_name)
+read_resource(package, resource_name, col_select = NULL)
 }
 \arguments{
-\item{package}{List describing a Data Package, created with \code{\link[=read_package]{read_package()}}
-or \code{\link[=create_package]{create_package()}}.}
+\item{package}{Data Package object, created with \code{\link[=read_package]{read_package()}} or
+\code{\link[=create_package]{create_package()}}.}
 
 \item{resource_name}{Name of the Data Resource.}
+
+\item{col_select}{Character vector of the columns to include in the result,
+in the order provided.
+Selecting columns can improve read speed.}
 }
 \value{
-\code{\link[dplyr:reexports]{dplyr::tibble()}} data frame with the Data Resource's tabular data.
+\code{\link[=tibble]{tibble()}} data frame with the Data Resource's tabular data.
+If there are parsing problems, a warning will alert you.
+You can retrieve the full details by calling \code{\link[=problems]{problems()}} on your data
+frame.
 }
 \description{
 Reads data from a \href{https://specs.frictionlessdata.io/data-resource/}{Data Resource} (in a Data
@@ -191,7 +198,7 @@ Can be parsed afterwards with \code{\link[lubridate:duration]{lubridate::duratio
 \code{character}.
 \item \href{https://specs.frictionlessdata.io/table-schema/#any}{any} as \code{character}.
 \item Any other value is not allowed.
-\item Type is guessed when not provided.
+\item Type is guessed if not provided.
 }
 }
 }
@@ -202,8 +209,7 @@ package <- read_package(
   system.file("extdata", "datapackage.json", package = "frictionless")
 )
 
-# List resources
-resources(package)
+package
 
 # Read data from the resource "observations"
 read_resource(package, "observations")
@@ -214,6 +220,9 @@ package$resources[[2]]$path
 # The column names and types are derived from the resource schema
 purrr::map_chr(package$resources[[2]]$schema$fields, "name")
 purrr::map_chr(package$resources[[2]]$schema$fields, "type")
+
+# Read data from the resource "deployments" with column selection
+read_resource(package, "deployments", col_select = c("latitude", "longitude"))
 }
 \seealso{
 Other read functions: 

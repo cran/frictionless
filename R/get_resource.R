@@ -22,25 +22,28 @@ get_resource <- function(package, resource_name) {
 
   # Check resource
   resource_names <- resources(package)
-  resource_names_collapse <- paste(resource_names, collapse = "`, `")
-  assertthat::assert_that(
-    resource_name %in% resource_names,
-    msg = glue::glue(
-      "Can't find resource `{resource_name}` in `{resource_names_collapse}`."
+  if (!resource_name %in% resources(package)) {
+    cli::cli_abort(
+      c(
+        "Can't find resource {.val {resource_name}} in {.arg package}.",
+        "i" = "Available resource{?s}: {.val {resources(package)}}."
+      ),
+      class = "frictionless_error_resource_not_found"
     )
-  )
+  }
 
   # Get resource
   resource <- purrr::keep(package$resources, ~ .x$name == resource_name)[[1]]
 
   # Check path(s) to file(s)
   # https://specs.frictionlessdata.io/data-resource/#data-location
-  assertthat::assert_that(
-    !is.null(resource$path) | !is.null(resource$data),
-    msg = glue::glue(
-      "Resource `{resource_name}` must have property `path` or `data`."
+  if (is.null(resource$path) && is.null(resource$data)) {
+    cli::cli_abort(
+      "Resource {.val {resource_name}} must have a {.field path} or
+      {.field data} property.",
+      class = "frictionless_error_resource_without_path_data"
     )
-  )
+  }
 
   # Assign read_from property (based on path, then df, then data)
   if (length(resource$path) != 0) {
@@ -51,7 +54,7 @@ get_resource <- function(package, resource_name) {
     }
     # Expand paths to full paths, check if file exists and check path safety,
     # unless those paths were willingly added by user in add_resource()
-    if (replace_null(attributes(resource)$path, "") != "added") {
+    if (attr(resource, "path") %||% "" != "added") {
       resource$path <- purrr::map_chr(
         resource$path, ~ check_path(.x, package$directory, safe = TRUE)
       )
@@ -62,5 +65,5 @@ get_resource <- function(package, resource_name) {
     resource$read_from <- "data"
   }
 
-  resource
+  return(resource)
 }
