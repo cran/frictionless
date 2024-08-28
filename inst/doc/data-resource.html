@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Peter Desmet" />
+
+
+<title>Data Resource</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Data Resource</h1>
+<h4 class="author">Peter Desmet</h4>
+
+
+
+<p><a href="https://specs.frictionlessdata.io/data-resource/">Data
+Resource</a> is a simple format to describe a data resource such as an
+individual table or file, including its name, format, path, etc.</p>
+<p><em>In this document we use the terms “package” for Data Package,
+“resource” for Data Resource, “dialect” for Table Dialect, and “schema”
+for Table Schema.</em></p>
+<div id="general-implementation" class="section level2">
+<h2>General implementation</h2>
+<p>Frictionless supports reading, manipulating and writing resources,
+but much of its functionality is limited to <a href="https://specs.frictionlessdata.io/tabular-data-resource/">Tabular
+Data Resources</a>.</p>
+<div id="read" class="section level3">
+<h3>Read</h3>
+<p><code>resources()</code> lists all resources in a package:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(frictionless)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">example_package</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># List the resources</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">resources</span>(package)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;deployments&quot;  &quot;observations&quot; &quot;media&quot;</span></span></code></pre></div>
+<p><code>read_resource()</code> reads data from a tabular resource to a
+data frame:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">read_resource</span>(package, <span class="st">&quot;deployments&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 5</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;   deployment_id longitude latitude start      comments                     </span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;             &lt;dbl&gt;    &lt;dbl&gt; &lt;date&gt;     &lt;chr&gt;                        </span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 1 1                  4.62     50.8 2020-09-25  &lt;NA&gt;                        </span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 2 2                  4.64     50.8 2020-10-01 &quot;On \&quot;forêt\&quot; road.&quot;         </span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 3 3                  4.65     50.8 2020-10-05 &quot;Malfunction/no photos, data&quot;</span></span></code></pre></div>
+<p>Frictionless does not support reading data from non-tabular
+resources.</p>
+</div>
+<div id="manipulate" class="section level3">
+<h3>Manipulate</h3>
+<p><code>remove_resource()</code> removes a resource (of any type):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">remove_resource</span>(package, <span class="st">&quot;deployments&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; A Data Package with 2 resources:</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; • observations</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; • media</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># This and many other functions return &quot;package&quot;, which you can update with</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># package &lt;- remove_resource(package, &quot;deployments&quot;)</span></span></code></pre></div>
+<p><code>add_resource()</code> adds or replaces a tabular resource. The
+provided data must be a data frame or a tabular data file
+(e.g. CSV):</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Add a resource with data from a data frame</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">add_resource</span>(package, <span class="st">&quot;iris&quot;</span>, <span class="at">data =</span> iris)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; A Data Package with 4 resources:</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; • deployments</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; • observations</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; • media</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; • iris</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co"># Replace a resource with one where data is stored in a tabular file</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;deployments.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;frictionless&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">add_resource</span>(package, <span class="st">&quot;deployments&quot;</span>, <span class="at">data =</span> path, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; A Data Package with 3 resources:</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; • deployments</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; • observations</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; • media</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
+<p>Note that you can pipe most functions (see
+<code>vignette(&quot;data-package&quot;)</code>).</p>
+</div>
+<div id="write" class="section level3">
+<h3>Write</h3>
+<p><code>write_package()</code> writes a package to disk as a
+<code>datapackage.json</code> file. This file includes the metadata of
+all the resources. <code>write_package()</code> also writes resource
+data to CSV files, unless the referred data are referred to be URL or
+inline. See the function documentation for details.</p>
+</div>
+</div>
+<div id="properties-implementation" class="section level2">
+<h2>Properties implementation</h2>
+<div id="name" class="section level3">
+<h3>name</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#name"><code>name</code></a>
+is required. It is used to identify a resource in
+<code>read_resource()</code>, <code>add_resource()</code> and
+<code>remove_resource()</code> (always as the second argument):</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>deployments <span class="ot">&lt;-</span> <span class="fu">read_resource</span>(package, <span class="at">resource_name =</span> <span class="st">&quot;deployments&quot;</span>)</span></code></pre></div>
+<p><code>add_resource()</code> sets <code>name</code> to the provided
+<code>resource_name</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">add_resource</span>(package, <span class="at">resource_name =</span> <span class="st">&quot;iris&quot;</span>, <span class="at">data =</span> iris)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; A Data Package with 4 resources:</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; • deployments</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; • observations</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; • media</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; • iris</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
+</div>
+<div id="path" class="section level3">
+<h3>path</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#data-location"><code>path</code></a>
+or <code>data</code> (see further) is required. Providing both is not
+allowed.</p>
+<p><code>path</code> is for data in files (e.g. a CSV file). It can be a
+local path or URL. Supported protocols are <code>http</code>,
+<code>https</code>, <code>ftp</code>, <code>sftp</code> and
+<code>sftp</code>. Absolute paths (<code>/</code>) or relative parent
+paths (<code>../</code>) are not allowed to avoid security
+vulnerabilities.</p>
+<p>When multiple paths are provided
+(<code>&quot;path&quot;: [&quot;myfile1.csv&quot;, &quot;myfile2.csv&quot;]</code>), the files are
+expected to have the same structure. <code>read_resource()</code> merges
+these into a single data frame in the order the paths are provided
+(using <code>dplyr::bind_rows()</code>):</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># The &quot;observations&quot; resource has multiple files in path</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>package<span class="sc">$</span>resources[[<span class="dv">2</span>]]<span class="sc">$</span>path</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;observations_1.tsv&quot; &quot;observations_2.tsv&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># These are combined into a single data frame when reading</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">read_resource</span>(package, <span class="st">&quot;observations&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; # A tibble: 8 × 7</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt;   observation_id deployment_id timestamp           scientific_name     count</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;          &lt;chr&gt;         &lt;dttm&gt;              &lt;chr&gt;               &lt;dbl&gt;</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; 1 1-1            1             2020-09-28 00:13:07 Capreolus capreolus     1</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; 2 1-2            1             2020-09-28 15:59:17 Capreolus capreolus     1</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; 3 1-3            1             2020-09-28 16:35:23 Lepus europaeus         1</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; 4 1-4            1             2020-09-28 17:04:04 Lepus europaeus         1</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; 5 1-5            1             2020-09-28 19:19:54 Sus scrofa              2</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; 6 2-1            2             2021-10-01 01:25:06 Sus scrofa              1</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; 7 2-2            2             2021-10-01 01:25:06 Sus scrofa              1</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; 8 2-3            2             2021-10-01 04:47:30 Sus scrofa              1</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; # ℹ 2 more variables: life_stage &lt;fct&gt;, comments &lt;chr&gt;</span></span></code></pre></div>
+<p><code>add_resource()</code> sets <code>path</code> to the path(s)
+provided in <code>data</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;deployments.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;frictionless&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">add_resource</span>(package, <span class="st">&quot;deployments&quot;</span>, <span class="at">data =</span> path, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt; A Data Package with 3 resources:</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; • deployments</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt; • observations</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; • media</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
+</div>
+<div id="data" class="section level3">
+<h3>data</h3>
+<p><em>Note: Support for inline <code>data</code> is currently limited,
+e.g. JSON object and string are not supported and <code>schema</code>,
+<code>mediatype</code> and <code>format</code> are ignored.</em></p>
+<p><code>data</code> is for inline data (included in the
+<code>datapackage.json</code>). <code>read_resource()</code> attempts to
+read <code>data</code> if it is provided as a JSON array:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># The &quot;media&quot; resource has inline data</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">str</span>(package<span class="sc">$</span>resources[[<span class="dv">3</span>]]<span class="sc">$</span>data)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="co">#&gt; List of 3</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="co">#&gt;  $ :List of 5</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt;   ..$ media_id      : chr &quot;aed5fa71-3ed4-4284-a6ba-3550d1a4de8d&quot;</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt;   ..$ deployment_id : chr &quot;1&quot;</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt;   ..$ observation_id: chr &quot;1-1&quot;</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt;   ..$ timestamp     : chr &quot;2020-09-28 02:14:59+02:00&quot;</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt;   ..$ file_path     : chr &quot;https://multimedia.agouti.eu/assets/aed5fa71-3ed4-4284-a6ba-3550d1a4de8d/file&quot;</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt;  $ :List of 5</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt;   ..$ media_id      : chr &quot;da81a501-8236-4cbd-aa95-4bc4b10a05df&quot;</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt;   ..$ deployment_id : chr &quot;1&quot;</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a><span class="co">#&gt;   ..$ observation_id: chr &quot;1-1&quot;</span></span>
+<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a><span class="co">#&gt;   ..$ timestamp     : chr &quot;2020-09-28 02:15:00+02:00&quot;</span></span>
+<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a><span class="co">#&gt;   ..$ file_path     : chr &quot;https://multimedia.agouti.eu/assets/da81a501-8236-4cbd-aa95-4bc4b10a05df/file&quot;</span></span>
+<span id="cb12-16"><a href="#cb12-16" tabindex="-1"></a><span class="co">#&gt;  $ :List of 5</span></span>
+<span id="cb12-17"><a href="#cb12-17" tabindex="-1"></a><span class="co">#&gt;   ..$ media_id      : chr &quot;0ba57608-3cf1-49d6-a5a2-fe680851024d&quot;</span></span>
+<span id="cb12-18"><a href="#cb12-18" tabindex="-1"></a><span class="co">#&gt;   ..$ deployment_id : chr &quot;1&quot;</span></span>
+<span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a><span class="co">#&gt;   ..$ observation_id: chr &quot;1-1&quot;</span></span>
+<span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a><span class="co">#&gt;   ..$ timestamp     : chr &quot;2020-09-28 02:15:01+02:00&quot;</span></span>
+<span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a><span class="co">#&gt;   ..$ file_path     : chr &quot;https://multimedia.agouti.eu/assets/0ba57608-3cf1-49d6-a5a2-fe680851024d/file&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">read_resource</span>(package, <span class="st">&quot;media&quot;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 3 × 5</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt;   media_id                      deployment_id observation_id timestamp file_path</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt;   &lt;chr&gt;                         &lt;chr&gt;         &lt;chr&gt;          &lt;chr&gt;     &lt;chr&gt;    </span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; 1 aed5fa71-3ed4-4284-a6ba-3550… 1             1-1            2020-09-… https://…</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; 2 da81a501-8236-4cbd-aa95-4bc4… 1             1-1            2020-09-… https://…</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; 3 0ba57608-3cf1-49d6-a5a2-fe68… 1             1-1            2020-09-… https://…</span></span></code></pre></div>
+<p><code>add_resource()</code> adds the provided data frame to
+<code>data</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="st">&quot;col_1&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="st">&quot;col_2&quot;</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>))</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">add_resource</span>(package, <span class="st">&quot;df&quot;</span>, df)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>package<span class="sc">$</span>resources[[<span class="dv">4</span>]]<span class="sc">$</span>data</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt;   col_1 col_2</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; 1     1     a</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; 2     2     b</span></span></code></pre></div>
+<p><code>write_package()</code> writes that data frame to a CSV file,
+adds its path to <code>path</code> and removes <code>data</code>.</p>
+<!-- ### type -->
+<!-- ### $schema -->
+</div>
+<div id="profile" class="section level3">
+<h3>profile</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#profile"><code>profile</code></a>
+is required to have the value <code>&quot;tabular-data-resource&quot;</code>.
+<code>add_resource()</code> sets <code>profile</code> to that value.</p>
+</div>
+<div id="schema" class="section level3">
+<h3>schema</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#resource-schemas"><code>schema</code></a>
+is required. It is used by <code>read_resource()</code> to parse data
+types and missing values. It can either be a JSON object or a path or
+URL referencing a JSON object. See <code>vignette(&quot;table-schema&quot;)</code>
+for details.</p>
+</div>
+<div id="dialect" class="section level3">
+<h3>dialect</h3>
+<p><a href="https://specs.frictionlessdata.io/tabular-data-resource/#csv-dialect"><code>dialect</code></a>
+is used by <code>read_resource()</code> to parse a tabular data file. It
+can either be a JSON object or a path or URL referencing a JSON object.
+See <code>vignette(&quot;table-dialect&quot;)</code> for details.</p>
+</div>
+<div id="title" class="section level3">
+<h3>title</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#optional-properties"><code>title</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>add_resource()</code>, unless provided:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">add_resource</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  package,</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="st">&quot;iris&quot;</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  iris,</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Edgar Anderson&#39;s Iris Data&quot;</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>  <span class="at">replace =</span> <span class="cn">TRUE</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>)</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; A Data Package with 4 resources:</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; • deployments</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; • observations</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; • media</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; • df</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
+</div>
+<div id="description" class="section level3">
+<h3>description</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#optional-properties"><code>description</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>add_resource()</code> unless provided
+(cf. <code>title</code>).</p>
+</div>
+<div id="format" class="section level3">
+<h3>format</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#optional-properties"><code>format</code></a>
+is ignored by <code>read_resource()</code>. <code>add_resource()</code>
+sets <code>format</code> when data are provided as a file, based on the
+provided <code>delim</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th>delim</th>
+<th>format</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&quot;,&quot;</code> (default)</td>
+<td><code>&quot;csv&quot;</code></td>
+</tr>
+<tr class="even">
+<td><code>&quot;\t&quot;</code></td>
+<td><code>&quot;tsv&quot;</code></td>
+</tr>
+<tr class="odd">
+<td>any other value</td>
+<td><code>&quot;csv&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;observations_1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;frictionless&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">add_resource</span>(package, <span class="st">&quot;observations&quot;</span>, <span class="at">data =</span> path, <span class="at">delim =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>package<span class="sc">$</span>resources[[<span class="dv">2</span>]]<span class="sc">$</span>format</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;tsv&quot;</span></span></code></pre></div>
+<p><code>add_resource()</code> leaves <code>format</code> undefined when
+data are provided as a data frame. <code>write_package()</code> sets it
+to <code>&quot;csv&quot;</code> when writing to disk.</p>
+</div>
+<div id="mediatype" class="section level3">
+<h3>mediatype</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#optional-properties"><code>mediatype</code></a>
+is ignored by <code>read_resource()</code>. <code>add_resource()</code>
+sets <code>mediatype</code> when data are provided as a file, based on
+the provided <code>delim</code>:</p>
+<table>
+<thead>
+<tr class="header">
+<th>delim</th>
+<th>mediatype</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>&quot;,&quot;</code> (default)</td>
+<td><code>&quot;text/csv&quot;</code></td>
+</tr>
+<tr class="even">
+<td><code>&quot;\t&quot;</code></td>
+<td><code>&quot;text/tab-separated-values&quot;</code></td>
+</tr>
+<tr class="odd">
+<td>any other value</td>
+<td><code>&quot;text/csv&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;observations_1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;frictionless&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">add_resource</span>(package, <span class="st">&quot;observations&quot;</span>, <span class="at">data =</span> path, <span class="at">delim =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>package<span class="sc">$</span>resources[[<span class="dv">2</span>]]<span class="sc">$</span>mediatype</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;text/tab-separated-values&quot;</span></span></code></pre></div>
+<p><code>add_resource()</code> leaves <code>mediatype</code> undefined
+when data are provided as a data frame. <code>write_package()</code>
+sets it to <code>&quot;text/csv&quot;</code> when writing to disk.</p>
+</div>
+<div id="encoding" class="section level3">
+<h3>encoding</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#optional-properties"><code>encoding</code></a>
+(e.g. <code>&quot;windows-1252&quot;</code>) is used by
+<code>read_resource()</code> to parse the file. It defaults to UTF-8 if
+no <code>encoding</code> is provided or if it cannot be recognized. The
+returned data frame is always UTF-8.</p>
+<p><code>add_resource()</code> guesses the <code>encoding</code> (using
+<code>readr::guess_encoding()</code>) when data are provided as file. It
+leaves the <code>encoding</code> undefined when data are provided as a
+data frame. <code>write_package()</code> sets it to <code>&quot;utf-8&quot;</code>
+when writing to disk.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;deployments.csv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;frictionless&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">add_resource</span>(package, <span class="st">&quot;deployments&quot;</span>, <span class="at">data =</span> path, <span class="at">delim =</span> <span class="st">&quot;,&quot;</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>package<span class="sc">$</span>resources[[<span class="dv">2</span>]]<span class="sc">$</span>encoding</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="co">#&gt; [1] &quot;UTF-8&quot;</span></span></code></pre></div>
+</div>
+<div id="bytes" class="section level3">
+<h3>bytes</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#optional-properties"><code>bytes</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>add_resource()</code> unless provided
+(cf. <code>title</code>).</p>
+</div>
+<div id="hash" class="section level3">
+<h3>hash</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#optional-properties"><code>hash</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>add_resource()</code> unless provided
+(cf. <code>title</code>).</p>
+</div>
+<div id="sources" class="section level3">
+<h3>sources</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#optional-properties"><code>sources</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>add_resource()</code> unless provided
+(cf. <code>title</code>).</p>
+</div>
+<div id="licenses" class="section level3">
+<h3>licenses</h3>
+<p><a href="https://specs.frictionlessdata.io/data-resource/#optional-properties"><code>licenses</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>add_resource()</code> unless provided
+(cf. <code>title</code>).</p>
+</div>
+<div id="compression" class="section level3">
+<h3>compression</h3>
+<p><a href="https://specs.frictionlessdata.io/patterns/#specification-3"><code>compression</code></a>
+(a recipe) is ignored by <code>read_resource()</code> and not set by
+<code>add_resource()</code>.</p>
+<p>Compression is derived from the provided <code>path</code> instead.
+If the <code>path</code> ends in <code>.gz</code>, <code>.bz2</code>,
+<code>.xz</code>, or <code>.zip</code>, the files are automatically
+decompressed by <code>read_resource()</code> (using default
+<code>readr::read_delim()</code> functionality). Only <code>.gz</code>
+files can be read directly from URL <code>path</code>s.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

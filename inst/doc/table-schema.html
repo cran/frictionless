@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Peter Desmet" />
+
+
+<title>Table Schema</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Table Schema</h1>
+<h4 class="author">Peter Desmet</h4>
+
+
+
+<p><a href="https://specs.frictionlessdata.io/table-schema/">Table
+Schema</a> is a simple format to describe tabular data, including field
+names, types, constraints, missing values, foreign keys, etc.</p>
+<p><em>In this document we use the terms “package” for Data Package,
+“resource” for Data Resource, “dialect” for Table Dialect, and “schema”
+for Table Schema.</em></p>
+<div id="general-implementation" class="section level2">
+<h2>General implementation</h2>
+<p>Frictionless supports <code>schema$fields</code> and
+<code>schema$missingValues</code> to parse data types and missing values
+when reading <a href="https://specs.frictionlessdata.io/tabular-data-resource/">Tabular
+Data Resources</a>. Schema manipulation is limited to extracting a
+schema from a resource, creating one from a data frame, and providing
+one back to a resource. Schema metadata is including when writing a
+package.</p>
+<div id="read" class="section level3">
+<h3>Read</h3>
+<p><code>get_schema()</code> extracts the schema from a resource:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(frictionless)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">example_package</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># Get the Table Schema for the resource &quot;observations&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>schema <span class="ot">&lt;-</span> <span class="fu">get_schema</span>(package, <span class="st">&quot;observations&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">str</span>(schema)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; List of 4</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&gt;  $ fields       :List of 7</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 3</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;observation_id&quot;</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 2</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ required: logi TRUE</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ unique  : logi TRUE</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 3</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;deployment_id&quot;</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 1</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ required: logi TRUE</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 4</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;timestamp&quot;</span></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;datetime&quot;</span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="co">#&gt;   .. ..$ format     : chr &quot;%Y-%m-%dT%H:%M:%S%z&quot;</span></span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 1</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ required: logi TRUE</span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 3</span></span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;scientific_name&quot;</span></span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 1</span></span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ required: logi FALSE</span></span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 3</span></span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;count&quot;</span></span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;integer&quot;</span></span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 2</span></span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ required: logi FALSE</span></span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ minimum : int 1</span></span>
+<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 3</span></span>
+<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;life_stage&quot;</span></span>
+<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
+<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 2</span></span>
+<span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ required: logi FALSE</span></span>
+<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum    : chr [1:5] &quot;adult&quot; &quot;subadult&quot; &quot;juvenile&quot; &quot;offspring&quot; ...</span></span>
+<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 3</span></span>
+<span id="cb1-44"><a href="#cb1-44" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;comments&quot;</span></span>
+<span id="cb1-45"><a href="#cb1-45" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
+<span id="cb1-46"><a href="#cb1-46" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 1</span></span>
+<span id="cb1-47"><a href="#cb1-47" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ required: logi FALSE</span></span>
+<span id="cb1-48"><a href="#cb1-48" tabindex="-1"></a><span class="co">#&gt;  $ missingValues: chr [1:3] &quot;&quot; &quot;NA&quot; &quot;NaN&quot;</span></span>
+<span id="cb1-49"><a href="#cb1-49" tabindex="-1"></a><span class="co">#&gt;  $ primaryKey   : chr &quot;observation_id&quot;</span></span>
+<span id="cb1-50"><a href="#cb1-50" tabindex="-1"></a><span class="co">#&gt;  $ foreignKeys  :List of 1</span></span>
+<span id="cb1-51"><a href="#cb1-51" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span id="cb1-52"><a href="#cb1-52" tabindex="-1"></a><span class="co">#&gt;   .. ..$ fields   : chr &quot;deployment_id&quot;</span></span>
+<span id="cb1-53"><a href="#cb1-53" tabindex="-1"></a><span class="co">#&gt;   .. ..$ reference:List of 2</span></span>
+<span id="cb1-54"><a href="#cb1-54" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ resource: chr &quot;deployments&quot;</span></span>
+<span id="cb1-55"><a href="#cb1-55" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ fields  : chr &quot;deployment_id&quot;</span></span></code></pre></div>
+<p><code>read_resource()</code> uses <code>schema$fields</code> to parse
+the names and data types of the columns in a tabular data file. For
+example, the third field in the schema (<code>timestamp</code>) is
+defined as a datetime <code>type</code> with a specific
+<code>format</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">str</span>(schema<span class="sc">$</span>fields[[<span class="dv">3</span>]])</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; List of 4</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;  $ name       : chr &quot;timestamp&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt;  $ type       : chr &quot;datetime&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt;  $ format     : chr &quot;%Y-%m-%dT%H:%M:%S%z&quot;</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt;  $ constraints:List of 1</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt;   ..$ required: logi TRUE</span></span></code></pre></div>
+<p><code>read_resource()</code> uses that information to correctly parse
+the data type and to assign the name <code>timestamp</code> to the
+column:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>observations <span class="ot">&lt;-</span> <span class="fu">read_resource</span>(package, <span class="st">&quot;observations&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>observations<span class="sc">$</span>timestamp</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;2020-09-28 00:13:07 UTC&quot; &quot;2020-09-28 15:59:17 UTC&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; [3] &quot;2020-09-28 16:35:23 UTC&quot; &quot;2020-09-28 17:04:04 UTC&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; [5] &quot;2020-09-28 19:19:54 UTC&quot; &quot;2021-10-01 01:25:06 UTC&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; [7] &quot;2021-10-01 01:25:06 UTC&quot; &quot;2021-10-01 04:47:30 UTC&quot;</span></span></code></pre></div>
+<p>The sixth field <code>life_stage</code> has an <code>enum</code>
+defined as one of its <code>constraints</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">str</span>(schema<span class="sc">$</span>fields[[<span class="dv">6</span>]])</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; List of 3</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;  $ name       : chr &quot;life_stage&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;  $ type       : chr &quot;string&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;  $ constraints:List of 2</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;   ..$ required: logi FALSE</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;   ..$ enum    : chr [1:5] &quot;adult&quot; &quot;subadult&quot; &quot;juvenile&quot; &quot;offspring&quot; ...</span></span></code></pre></div>
+<p><code>read_resource()</code> uses that information to parse the
+column as a factor, using <code>enum</code> as the factor levels:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">class</span>(observations<span class="sc">$</span>life_stage)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;factor&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">levels</span>(observations<span class="sc">$</span>life_stage)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;adult&quot;     &quot;subadult&quot;  &quot;juvenile&quot;  &quot;offspring&quot; &quot;unknown&quot;</span></span></code></pre></div>
+</div>
+<div id="manipulate" class="section level3">
+<h3>Manipulate</h3>
+<p>A schema is a list which you can manipulate, but frictionless does
+not provide functions to do that. Use <code>{purrr}</code> or base R
+instead (see <code>vignette(&quot;frictionless&quot;)</code>). You do not have to
+start a schema from scratch though: use <code>get_schema()</code> (see
+above) or <code>create_schema()</code> instead.</p>
+<p><code>create_schema()</code> creates a schema from a data frame and
+defines the <code>name</code>, <code>type</code> (and if a factor
+<code>constraints$enum</code>) for each field:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Create a schema from the built-in dataset &quot;iris&quot;</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>iris_schema <span class="ot">&lt;-</span> <span class="fu">create_schema</span>(iris)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">str</span>(iris_schema)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="co">#&gt; List of 1</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt;  $ fields:List of 5</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name: chr &quot;Sepal.Length&quot;</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type: chr &quot;number&quot;</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name: chr &quot;Sepal.Width&quot;</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type: chr &quot;number&quot;</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name: chr &quot;Petal.Length&quot;</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type: chr &quot;number&quot;</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name: chr &quot;Petal.Width&quot;</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type: chr &quot;number&quot;</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 3</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;Species&quot;</span></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 1</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum: chr [1:3] &quot;setosa&quot; &quot;versicolor&quot; &quot;virginica&quot;</span></span></code></pre></div>
+<p><code>add_resource()</code> allows to include the schema with a
+resource. If no schema is provided, one is created with
+<code>create_schema()</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">add_resource</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  package,</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="at">resource_name =</span> <span class="st">&quot;iris&quot;</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="at">data =</span> iris,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="at">schema =</span> iris_schema</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+<div id="write" class="section level3">
+<h3>Write</h3>
+<p><code>write_package()</code> writes a package to disk as a
+<code>datapackage.json</code> file. This file includes the metadata of
+all the resources, including the schema. To directly write a schema to
+disk, use <code>jsonlite::write_json()</code>.</p>
+</div>
+</div>
+<div id="schema-properties-implementation" class="section level2">
+<h2>Schema properties implementation</h2>
+<div id="fields" class="section level3">
+<h3>fields</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#field-descriptors"><code>fields</code></a>
+is required. It is used by <code>read_resource()</code> to parse the
+names and data types of the columns in a tabular data file.
+<code>create_schema()</code> sets <code>fields</code> based on
+information in a data frame. See <a href="#field-properties-implementation">Field properties
+implementation</a> for details.</p>
+<!-- ### $schema -->
+<!-- ### fieldMatch -->
+</div>
+<div id="missingvalues" class="section level3">
+<h3>missingValues</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#missing-values"><code>missingValues</code></a>
+is used by <code>read_resource()</code> and defaults to <code>&quot;&quot;</code>.
+It is passed to <code>na</code> in <code>readr::read_delim()</code>.
+<code>create_schema()</code> does not set <code>missingValues</code>.
+<code>write_package()</code> converts <code>NA</code> values to
+<code>&quot;&quot;</code> when writing a data frame to a CSV file. Since this is
+the default, no <code>missingValues</code> property is set.</p>
+</div>
+<div id="primarykey" class="section level3">
+<h3>primaryKey</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#primary-key"><code>primaryKey</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>create_schema()</code>.</p>
+<!-- ### uniqueKeys -->
+</div>
+<div id="foreignkeys" class="section level3">
+<h3>foreignKeys</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#foreign-keys"><code>foreignKeys</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>create_schema()</code>.</p>
+</div>
+</div>
+<div id="field-properties-implementation" class="section level2">
+<h2>Field properties implementation</h2>
+<div id="name" class="section level3">
+<h3>name</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#name"><code>name</code></a>
+is used by <code>read_resource()</code> to assign a column name. The
+vector of names is passed as <code>col_names</code> to
+<code>readr::read_delim()</code>, ignoring names provided in the header
+of the data file. <code>create_schema()</code> uses the data frame
+column name to set <code>name</code>.</p>
+</div>
+<div id="type-and-format" class="section level3">
+<h3>type and format</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#types-and-formats"><code>type</code></a>
+and (for some types) <a href="https://specs.frictionlessdata.io/table-schema/#types-and-formats"><code>format</code></a>
+is used by <code>read_resource()</code> to understand the column type.
+The vector of types is passed as <code>col_types</code> to
+<code>readr::read_delim()</code>, which warns if there are parsing
+issues (inspect with <code>problems()</code>).
+<code>create_schema()</code> uses the data frame column type to set
+<code>type</code>. See <a href="#field-types-implementation">Field types
+implementation</a> for details.</p>
+<p><code>read_resource()</code> interprets <code>type</code> as
+follows:</p>
+<table>
+<thead>
+<tr class="header">
+<th>field type</th>
+<th>column type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="#string"><code>string</code></a></td>
+<td><code>character</code> or <code>factor</code></td>
+</tr>
+<tr class="even">
+<td><a href="#number"><code>number</code></a></td>
+<td><code>double</code> or <code>factor</code></td>
+</tr>
+<tr class="odd">
+<td><a href="#integer"><code>integer</code></a></td>
+<td><code>double</code> or <code>factor</code></td>
+</tr>
+<tr class="even">
+<td><a href="#boolean"><code>boolean</code></a></td>
+<td><code>logical</code></td>
+</tr>
+<tr class="odd">
+<td><a href="#object"><code>object</code></a></td>
+<td><code>character</code></td>
+</tr>
+<tr class="even">
+<td><a href="#array"><code>array</code></a></td>
+<td><code>character</code></td>
+</tr>
+<tr class="odd">
+<td><a href="#datetime"><code>datetime</code></a></td>
+<td><code>POSIXct</code></td>
+</tr>
+<tr class="even">
+<td><a href="#date"><code>date</code></a></td>
+<td><code>Date</code></td>
+</tr>
+<tr class="odd">
+<td><a href="#time"><code>time</code></a></td>
+<td><code>hms::hms()</code></td>
+</tr>
+<tr class="even">
+<td><a href="#year"><code>year</code></a></td>
+<td><code>Date</code></td>
+</tr>
+<tr class="odd">
+<td><a href="#yearmonth"><code>yearmonth</code></a></td>
+<td><code>Date</code></td>
+</tr>
+<tr class="even">
+<td><a href="#duration"><code>duration</code></a></td>
+<td><code>character</code></td>
+</tr>
+<tr class="odd">
+<td><a href="#geopoint"><code>geopoint</code></a></td>
+<td><code>character</code></td>
+</tr>
+<tr class="even">
+<td><a href="#geojson"><code>geojson</code></a></td>
+<td><code>character</code></td>
+</tr>
+<tr class="odd">
+<td><a href="#any"><code>any</code></a></td>
+<td><code>character</code></td>
+</tr>
+<tr class="even">
+<td>other value</td>
+<td>error</td>
+</tr>
+<tr class="odd">
+<td>undefined</td>
+<td>guessed</td>
+</tr>
+</tbody>
+</table>
+<p><code>create_schema()</code> sets <code>type</code> as follows:</p>
+<table>
+<thead>
+<tr class="header">
+<th>column type</th>
+<th>field type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>character</code></td>
+<td><code>string</code></td>
+</tr>
+<tr class="even">
+<td><code>Date</code></td>
+<td><code>date</code></td>
+</tr>
+<tr class="odd">
+<td><code>difftime</code></td>
+<td><code>number</code></td>
+</tr>
+<tr class="even">
+<td><code>factor</code></td>
+<td><code>string</code> with factor levels as
+<code>constraints$enum</code></td>
+</tr>
+<tr class="odd">
+<td><code>hms::hms()</code></td>
+<td><code>time</code></td>
+</tr>
+<tr class="even">
+<td><code>integer</code></td>
+<td><code>integer</code></td>
+</tr>
+<tr class="odd">
+<td><code>logical</code></td>
+<td><code>boolean</code></td>
+</tr>
+<tr class="even">
+<td><code>numeric</code></td>
+<td><code>number</code></td>
+</tr>
+<tr class="odd">
+<td><code>POSIXct</code>/<code>POSIXlt</code></td>
+<td><code>datetime</code></td>
+</tr>
+<tr class="even">
+<td>any other type</td>
+<td><code>any</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>create_schema()</code> does not set a <code>format</code>,
+since defaults are used for all types. This is also the case for
+datetimes, dates and times, since <code>readr::write_csv()</code> used
+by <code>write_package()</code> formats those to ISO8601, which is
+considered the default.</p>
+</div>
+<div id="title" class="section level3">
+<h3>title</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#title"><code>title</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>create_schema()</code>.</p>
+</div>
+<div id="description" class="section level3">
+<h3>description</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#description"><code>description</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>create_schema()</code>.</p>
+</div>
+<div id="example" class="section level3">
+<h3>example</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#example"><code>example</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>create_schema()</code>.</p>
+</div>
+<div id="constraints" class="section level3">
+<h3>constraints</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#constraints"><code>constraints</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>create_schema()</code>, except for <code>constraints$enum</code>.
+<code>read_resource()</code> uses it set the column type to
+<code>factor</code>, with <code>enum</code> values as factor levels.
+<code>create_schema()</code> does the reverse.</p>
+<!-- ### categories -->
+<!-- ### categoriesOrdered -->
+<!-- ### missingValues -->
+</div>
+<div id="rdftype" class="section level3">
+<h3>rdfType</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#rich-types"><code>rdfType</code></a>
+is ignored by <code>read_resource()</code> and not set by
+<code>create_schema()</code>.</p>
+</div>
+</div>
+<div id="field-types-implementation" class="section level2">
+<h2>Field types implementation</h2>
+<div id="string" class="section level3">
+<h3>string</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#string"><code>string</code></a>
+is interpreted as <code>character</code>. Or <code>factor</code> when
+<code>constraints$enum</code> is defined.</p>
+<ul>
+<li><code>format</code> is ignored.</li>
+</ul>
+</div>
+<div id="number" class="section level3">
+<h3>number</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#number"><code>number</code></a>
+is interpreted as <code>double</code>. Or <code>factor</code> when
+<code>constraints$enum</code> is defined.</p>
+<ul>
+<li><code>bareNumber</code> is supported. If <code>false</code>,
+whitespace and non-numeric characters are ignored.</li>
+<li><code>decimalChar</code> (<code>.</code> by default) is supported,
+but as a single value for all number fields. If different values are
+defined, the most occurring one is selected.</li>
+<li><code>groupChar</code> (undefined by default) is supported, but as a
+single value for all number fields. If different values are defined, the
+most occurring one is selected.</li>
+</ul>
+</div>
+<div id="integer" class="section level3">
+<h3>integer</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#integer"><code>integer</code></a>
+is interpreted as <code>double</code> (to avoid issues with big
+numbers). Or <code>factor</code> when <code>constraints$enum</code> is
+defined.</p>
+<ul>
+<li><code>bareNumber</code> is supported. If <code>false</code>,
+whitespace and non-numeric characters are ignored.</li>
+</ul>
+</div>
+<div id="boolean" class="section level3">
+<h3>boolean</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#boolean"><code>boolean</code></a>
+is interpreted as <code>logical</code>.</p>
+<ul>
+<li><code>trueValues</code> that are not defaults are not
+supported.</li>
+<li><code>falseValues</code> that are not defaults are not
+supported.</li>
+</ul>
+</div>
+<div id="object" class="section level3">
+<h3>object</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#object"><code>object</code></a>
+is interpreted as <code>character</code></p>
+</div>
+<div id="array" class="section level3">
+<h3>array</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#array"><code>array</code></a>
+is interpreted as <code>character</code>.</p>
+<!-- ### list -->
+</div>
+<div id="datetime" class="section level3">
+<h3>datetime</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#datetime"><code>datetime</code></a>
+is interpreted as <code>POSIXct</code>.</p>
+<ul>
+<li><code>format</code> is supported for the values <code>default</code>
+(ISO datetime), <code>any</code> (ISO datetime) and the same patterns as
+for <code>date</code> and <code>time</code>. The value <code>%c</code>
+is not supported.</li>
+</ul>
+</div>
+<div id="date" class="section level3">
+<h3>date</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#date"><code>date</code></a>
+is interpreted as <code>Date</code>.</p>
+<ul>
+<li><code>format</code> is supported for the values <code>default</code>
+(ISO date), <code>any</code> (guess <code>ymd</code>) and <a href="https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior">Python/C
+strptime</a> patterns, such as <code>%a, %d %B %Y</code> for
+<code>Sat, 23 November 2013</code>. <code>%x</code> is interpreted as
+<code>%m/%d/%y</code>. The values <code>%j</code>, <code>%U</code>,
+<code>%w</code> and <code>%W</code> are not supported.</li>
+</ul>
+</div>
+<div id="time" class="section level3">
+<h3>time</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#time"><code>time</code></a>
+is interpreted as <code>hms::hms()</code>.</p>
+<ul>
+<li><code>format</code> is supported for the values <code>default</code>
+(ISO time), <code>any</code> (guess <code>hms</code>) and <a href="https://docs.python.org/2/library/datetime.html#strftime-strptime-behavior">Python/C
+strptime</a> patterns, such as <code>%I%p%M:%S.%f%z</code> for
+<code>8AM30:00.300+0200</code>.</li>
+</ul>
+</div>
+<div id="year" class="section level3">
+<h3>year</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#year"><code>year</code></a>
+is interpreted as <code>Date</code> with month and day set to
+<code>01</code>.</p>
+</div>
+<div id="yearmonth" class="section level3">
+<h3>yearmonth</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#yearmonth"><code>yearmonth</code></a>
+is interpreted as <code>Date</code> with day set to <code>01</code>.</p>
+</div>
+<div id="duration" class="section level3">
+<h3>duration</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#duration"><code>duration</code></a>
+is interpreted as <code>character</code>. You can parse these values
+with <code>lubridate::duration()</code>.</p>
+</div>
+<div id="geopoint" class="section level3">
+<h3>geopoint</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#geopoint"><code>geopoint</code></a>
+is interpreted as <code>character</code>.</p>
+</div>
+<div id="geojson" class="section level3">
+<h3>geojson</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#geojson"><code>geojson</code></a>
+is interpreted as <code>character</code>.</p>
+</div>
+<div id="any" class="section level3">
+<h3>any</h3>
+<p><a href="https://specs.frictionlessdata.io/table-schema/#any"><code>any</code></a>
+is interpreted as <code>character</code></p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

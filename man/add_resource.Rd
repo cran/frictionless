@@ -4,10 +4,18 @@
 \alias{add_resource}
 \title{Add a Data Resource}
 \usage{
-add_resource(package, resource_name, data, schema = NULL, delim = ",", ...)
+add_resource(
+  package,
+  resource_name,
+  data,
+  schema = NULL,
+  replace = FALSE,
+  delim = ",",
+  ...
+)
 }
 \arguments{
-\item{package}{Data Package object, created with \code{\link[=read_package]{read_package()}} or
+\item{package}{Data Package object, as returned by \code{\link[=read_package]{read_package()}} or
 \code{\link[=create_package]{create_package()}}.}
 
 \item{resource_name}{Name of the Data Resource.}
@@ -18,7 +26,7 @@ add_resource(package, resource_name, data, schema = NULL, delim = ",", ...)
 when using \code{\link[=write_package]{write_package()}}.
 \item One or more paths to CSV file(s) as a character (vector): added to the
 resource as \code{path}.
-The \strong{last file will be read} with \code{\link[readr:read_delim]{readr::read_delim()}} to create or
+The last file will be read with \code{\link[readr:read_delim]{readr::read_delim()}} to create or
 compare with \code{schema} and to set \code{format}, \code{mediatype} and \code{encoding}.
 The other files are ignored, but are expected to have the same structure
 and properties.
@@ -28,13 +36,16 @@ and properties.
 Schema for the \code{data}.
 If not provided, one will be created using \code{\link[=create_schema]{create_schema()}}.}
 
+\item{replace}{If \code{TRUE}, the added resource will replace an existing
+resource with the same name.}
+
 \item{delim}{Single character used to separate the fields in the CSV file(s),
 e.g. \verb{\\t} for tab delimited file.
-Will be set as \code{delimiter} in the resource \href{https://specs.frictionlessdata.io/csv-dialect/#specification}{CSV dialect}, so
-read functions know how to read the file(s).}
+Will be set as \code{delimiter} in the resource Table Dialect, so read functions
+.  know how to read the file(s).}
 
-\item{...}{Additional \href{https://specs.frictionlessdata.io/data-resource/#metadata-properties}{metadata properties}
-to add to the resource, e.g. \verb{title = "My title", validated = FALSE}.
+\item{...}{Additional metadata properties to add to the resource, e.g.
+\verb{title = "My title", validated = FALSE}.
 These are not verified against specifications and are ignored by
 \code{\link[=read_resource]{read_resource()}}.
 The following properties are automatically set and can't be provided with
@@ -42,20 +53,24 @@ The following properties are automatically set and can't be provided with
 \code{encoding} and \code{dialect}.}
 }
 \value{
-Provided \code{package} with one additional resource.
+\code{package} with one additional resource.
 }
 \description{
-Adds a Tabular \href{https://specs.frictionlessdata.io/data-resource/}{Data Resource} to a Data
-Package.
+Adds a Data Resource to a Data Package.
 The resource will be a \href{https://specs.frictionlessdata.io/tabular-data-resource/}{Tabular Data Resource}.
 The resource name can only contain lowercase alphanumeric characters plus
 \code{.}, \code{-} and \verb{_}.
 }
+\details{
+See \code{vignette("data-resource")} (and to a lesser extend
+\code{vignette("table-dialect")}) to learn how this function implements the
+Data Package standard.
+}
 \examples{
 # Load the example Data Package
-package <- example_package
+package <- example_package()
 
-# List resources
+# List the resources
 resources(package)
 
 # Create a data frame
@@ -68,31 +83,35 @@ df <- data.frame(
   y = c(860, 900)
 )
 
-# Add resource "positions" to the Data Package, from the data frame
+# Add the resource "positions" from the data frame
 package <- add_resource(package, "positions", data = df)
 
-# Add resource "positions_2" to the Data Package, with user-defined schema
-# and title
+# Add the resource "positions_with_schema", with a user-defined schema and title
 my_schema <- create_schema(df)
 package <- add_resource(
   package,
-  "positions_2",
+  resource_name = "positions_with_schema",
   data = df,
   schema = my_schema,
-  title = "Positions"
+  title = "Positions with schema"
 )
 
-# Add resource "observations_2" to the Data Package, from CSV file paths
-path_1 <- system.file("extdata", "observations_1.csv", package = "frictionless")
-path_2 <- system.file("extdata", "observations_2.csv", package = "frictionless")
-package <- add_resource(package, "observations_2", data = c(path_1, path_2))
+# Replace the resource "observations" with a file-based resource (2 TSV files)
+path_1 <- system.file("extdata", "observations_1.tsv", package = "frictionless")
+path_2 <- system.file("extdata", "observations_2.tsv", package = "frictionless")
+package <- add_resource(
+  package,
+  resource_name = "observations",
+  data = c(path_1, path_2),
+  replace = TRUE,
+  delim = "\t"
+)
 
-# List resources ("positions", "positions_2", "observations_2" added)
+# List the resources ("positions" and "positions_with_schema" added)
 resources(package)
 }
 \seealso{
 Other edit functions: 
-\code{\link{get_schema}()},
 \code{\link{remove_resource}()}
 }
 \concept{edit functions}

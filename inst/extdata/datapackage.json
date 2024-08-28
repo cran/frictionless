@@ -2,6 +2,7 @@
   "name": "example_package",
   "id": "115f49c1-8603-463e-a908-68de98327266",
   "created": "2021-03-02T17:22:33Z",
+  "image": null,
   "licenses": [
     {
       "name": "CC0-1.0",
@@ -69,12 +70,15 @@
     },
     {
       "name": "observations",
-      "path": ["https://raw.githubusercontent.com/frictionlessdata/frictionless-r/main/inst/extdata/observations_1.csv", "https://raw.githubusercontent.com/frictionlessdata/frictionless-r/main/inst/extdata/observations_2.csv"],
+      "path": ["observations_1.tsv", "observations_2.tsv"],
       "profile": "tabular-data-resource",
       "title": "Camera trap observations",
       "format": "csv",
       "mediatype": "text/csv",
       "encoding": "utf-8",
+      "dialect": {
+        "delimiter": "\t"
+      },
       "schema": {
         "fields": [
           {

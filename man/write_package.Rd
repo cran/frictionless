@@ -4,10 +4,10 @@
 \alias{write_package}
 \title{Write a Data Package to disk}
 \usage{
-write_package(package, directory = ".", compress = FALSE)
+write_package(package, directory, compress = FALSE)
 }
 \arguments{
-\item{package}{Data Package object, created with \code{\link[=read_package]{read_package()}} or
+\item{package}{Data Package object, as returned by \code{\link[=read_package]{read_package()}} or
 \code{\link[=create_package]{create_package()}}.}
 
 \item{directory}{Path to local directory to write files to.}
@@ -30,7 +30,7 @@ CSV files are copied or downloaded to \code{directory} and \code{path} points to
 location of file(s).
 \item Resource \code{path} has only URL(s): resource stays as is.
 \item Resource has inline \code{data} originally: resource stays as is.
-\item Resource has inline \code{data} as result of adding data with \code{add_resource()}:
+\item Resource has inline \code{data} as result of adding data with \code{\link[=add_resource]{add_resource()}}:
 data are written to a CSV file using \code{\link[readr:write_delim]{readr::write_csv()}}, \code{path} points to
 location of file, \code{data} property is removed.
 Use \code{compress = TRUE} to gzip those CSV files.

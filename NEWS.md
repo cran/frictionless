@@ -1,3 +1,23 @@
+# frictionless 1.2.0
+
+## Changes for users
+
+* `add_resource()` now allows to replace an existing resource (#227).
+* `read_resource()` now returns an error if both `path` and `data` are provided (#143).
+* `write_package()` no longer writes to `"."` by default, since this is not allowed by CRAN policies. The user needs to explicitly define a directory (#205).
+* `null` values in a read `datapackage.json` are now retained by `write_package()`, rather than being changed to empty lists. Properties assigned by the user to `NA` and `NULL` remain being written as `null` and removed respectively (#203).
+* New vignettes `vignette("data-package")`, `vignette("data-resource")`, `vignette("table-dialect")` and `vignette("table-schema")` describe how frictionless implements the Data Package standard. The (verbose) function documentation of `read_resource()` and `create_schema()` has been moved to these vignettes, improving readability and maintenance (#208, #246).
+* The included dataset `example_package` is removed in favour of the function `example_package()`. This function allows to reproducibly provide a local Data Package, without the need for an internet connection. The `observations` resource was also changed from a remote to a local resource and from CSV to TSV. **This change affects the use of `example_package` in older versions of frictionless.** We recommend to update frictionless to the latest version (#114, #253).
+
+## Changes for developers
+
+* `read_resource()` is now more modular under the hood, which should make it easier to extend (#210).
+* [checklist](https://github.com/inbo/checklist) tooling was removed, in favour of `CITATION.cff` for citation and Zenodo deposit (#206).
+
+## Other changes
+
+* Add [Sanne Govaert](https://orcid.org/0000-0002-8939-1305) as author. Welcome Sanne!
+
 # frictionless 1.1.0
 
 ## Changes for users
@@ -6,6 +26,7 @@
 * `read_package()` no longer returns a message regarding rights and credit (#121). If `package$id` is a URL (e.g. a DOI) it will be mentioned in `print()`.
 * `add_resource()` accepts additional arguments via `...`. These are added as (custom) properties to the resource and are retained in `write_package()` (#195).
 * `read_resource()` now supports column selection via the `col_select` argument from `readr::read_delim()`. This can vastly improve reading speed (#123). [Tidy selection](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html) is not supported.
+* `write_package()` no longer adds `"profile": "tabular-data-package"` to `datapackage.json`. It is also removed from the example dataset (#188).
 * Error and warning messages use semantic colours for variables, parameters, fields, etc.
 * `readr::problems()` is included in NAMESPACE so you don't have to load readr to inspect parsing issues. The function is mentioned in the documentation of `read_resource()` (#129).
 

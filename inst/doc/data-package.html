@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Peter Desmet" />
+
+
+<title>Data Package</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Data Package</h1>
+<h4 class="author">Peter Desmet</h4>
+
+
+
+<p><a href="https://specs.frictionlessdata.io/data-package/">Data
+Package</a> is a simple container format to describe a coherent
+collection of data (a dataset), including its contributors, licenses,
+etc.</p>
+<p><em>In this document we use the terms “package” for Data Package,
+“resource” for Data Resource, “dialect” for Table Dialect, and “schema”
+for Table Schema.</em></p>
+<div id="general-implementation" class="section level2">
+<h2>General implementation</h2>
+<p>Frictionless supports reading, manipulating and writing packages.
+Much of its functionality is focused on manipulating resources (see
+<code>vignette(&quot;data-resource&quot;)</code>).</p>
+<div id="read" class="section level3">
+<h3>Read</h3>
+<p><code>read_package()</code> reads a package from
+<code>datapackage.json</code> file (path or URL):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(frictionless)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;datapackage.json&quot;</span>, <span class="at">package =</span> <span class="st">&quot;frictionless&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">read_package</span>(file)</span></code></pre></div>
+<p><code>print.datapackage()</code> prints a human-readable summary of a
+package:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>package</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; A Data Package with 3 resources:</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; • deployments</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; • observations</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; • media</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
+</div>
+<div id="manipulate" class="section level3">
+<h3>Manipulate</h3>
+<p>A package is a list, with all the properties that were present in the
+<code>datapackage.json</code> file (e.g. <code>name</code>,
+<code>id</code>, etc.). Frictionless adds the custom property
+<code>&quot;directory&quot;</code> to support reading data (which is removed when
+writing to disk) and extends the class with <code>&quot;datapackage&quot;</code>
+to support printing and checking:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">attributes</span>(package)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; $names</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;name&quot;      &quot;id&quot;        &quot;created&quot;   &quot;image&quot;     &quot;licenses&quot;  &quot;temporal&quot; </span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; [7] &quot;resources&quot; &quot;directory&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; $class</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;datapackage&quot; &quot;list&quot;</span></span></code></pre></div>
+<p><code>create_package()</code> creates a package from scratch or from
+an existing package. It adds the required properties and class if those
+are missing:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># From scratch</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">create_package</span>()</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt; A Data Package with 0 resources.</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># From an existing package</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">create_package</span>(package)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; A Data Package with 3 resources:</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; • deployments</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; • observations</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; • media</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
+<p><code>check_package()</code> checks if a package contains the
+required properties and class:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>invalid_package <span class="ot">&lt;-</span> <span class="fu">example_package</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>invalid_package<span class="sc">$</span>resources <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">check_package</span>(invalid_package)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; Error in `check_package()`:</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; ! `package` must be a Data Package object.</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; ✖ `package` is missing a resources property or it is not a list.</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; ℹ Create a valid Data Package object with `read_package()` or</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt;   `create_package()`.</span></span></code></pre></div>
+<p>You can manipulate the package list, but frictionless does not
+provide functions to do that. Use <code>{purrr}</code> or base R instead
+(see <code>vignette(&quot;frictionless&quot;)</code>). Note however that some
+functions (e.g. <code>unclass()</code> or <code>append()</code>) removes
+the custom class, creating an invalid package. You can fix this by
+calling <code>create_package()</code> on your package.</p>
+<p>Most functions have <code>package</code> as their first argument and
+return package. This allows you to <strong>pipe the
+functions</strong>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># Or library(magrittr)</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>my_package <span class="ot">&lt;-</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">create_package</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="at">resource_name =</span> <span class="st">&quot;iris&quot;</span>, <span class="at">data =</span> iris) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="fu">append</span>(<span class="fu">c</span>(<span class="st">&quot;title&quot;</span> <span class="ot">=</span> <span class="st">&quot;my_package&quot;</span>), <span class="at">after =</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">create_package</span>() <span class="co"># To add the datapackage class again</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>my_package</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; A Data Package with 1 resource:</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; • iris</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
+</div>
+<div id="write" class="section level3">
+<h3>Write</h3>
+<p><code>write_package()</code> writes a package to disk as a
+<code>datapackage.json</code> file. For some resources, it also writes
+the data files. See the function documentation and
+<code>vignette(&quot;data-resource&quot;)</code> for details.</p>
+</div>
+</div>
+<div id="properties-implementation" class="section level2">
+<h2>Properties implementation</h2>
+<div id="resources" class="section level3">
+<h3>resources</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#resource-information"><code>resources</code></a>
+is required. It is used by <code>resources()</code> and many other
+functions. <code>check_package()</code> returns an error if it is
+missing.</p>
+<!-- ### $schema -->
+</div>
+<div id="profile" class="section level3">
+<h3>profile</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#profile"><code>profile</code></a>
+is ignored by <code>read_package()</code> and not set (to
+e.g. <code>&quot;tabular-data-package&quot;</code>) by
+<code>create_package()</code>.</p>
+</div>
+<div id="name" class="section level3">
+<h3>name</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#name"><code>name</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>.</p>
+</div>
+<div id="id" class="section level3">
+<h3>id</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#id"><code>id</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>. <code>print.datapackage()</code> adds an
+extra sentence when <code>id</code> is a URL (like a DOI):</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">example_package</span>()</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>package<span class="sc">$</span>id <span class="ot">&lt;-</span> <span class="st">&quot;https://doi.org/10.5281/zenodo.10053702/&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>package</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; A Data Package with 3 resources:</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; • deployments</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; • observations</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; • media</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; For more information, see &lt;https://doi.org/10.5281/zenodo.10053702/&gt;.</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
+</div>
+<div id="licenses" class="section level3">
+<h3>licenses</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#licenses"><code>licenses</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>.</p>
+</div>
+<div id="title" class="section level3">
+<h3>title</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#title"><code>title</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>.</p>
+</div>
+<div id="description" class="section level3">
+<h3>description</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#description"><code>description</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>.</p>
+</div>
+<div id="homepage" class="section level3">
+<h3>homepage</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#homepage"><code>homepage</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>.</p>
+</div>
+<div id="image" class="section level3">
+<h3>image</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#image"><code>image</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>.</p>
+</div>
+<div id="version" class="section level3">
+<h3>version</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#version"><code>version</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>.</p>
+</div>
+<div id="created" class="section level3">
+<h3>created</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#created"><code>created</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>.</p>
+</div>
+<div id="keywords" class="section level3">
+<h3>keywords</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#keywords"><code>keywords</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>.</p>
+</div>
+<div id="contributors" class="section level3">
+<h3>contributors</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#contributors"><code>contributors</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>.</p>
+</div>
+<div id="sources" class="section level3">
+<h3>sources</h3>
+<p><a href="https://specs.frictionlessdata.io/data-package/#sources"><code>sources</code></a>
+is ignored by <code>read_package()</code> and not set by
+<code>create_package()</code>.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
