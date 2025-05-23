@@ -17,7 +17,9 @@ knitr::opts_chunk$set(
 
 [Data Resource](https://specs.frictionlessdata.io/data-resource/) is a simple format to describe a data resource such as an individual table or file, including its name, format, path, etc.
 
-_In this document we use the terms "package" for Data Package, "resource" for Data Resource, "dialect" for Table Dialect, and "schema" for Table Schema._
+::: {.callout-info}
+In this document we use the terms "package" for Data Package, "resource" for Data Resource, "dialect" for Table Dialect, and "schema" for Table Schema.
+:::
 
 ## General implementation
 
@@ -61,11 +63,13 @@ remove_resource(package, "deployments")
 add_resource(package, "iris", data = iris)
 
 # Replace a resource with one where data is stored in a tabular file
-path <- system.file("extdata", "deployments.csv", package = "frictionless")
+path <- system.file("extdata", "v1", "deployments.csv", package = "frictionless")
 add_resource(package, "deployments", data = path, replace = TRUE)
 ```
 
-Note that you can pipe most functions (see `vignette("data-package")`).
+::: {.callout-info}
+You can pipe most functions (see `vignette("data-package")`).
+:::
 
 ### Write
 
@@ -105,13 +109,15 @@ read_resource(package, "observations")
 `add_resource()` sets `path` to the path(s) provided in `data`:
 
 ```{r}
-path <- system.file("extdata", "deployments.csv", package = "frictionless")
+path <- system.file("extdata", "v1", "deployments.csv", package = "frictionless")
 add_resource(package, "deployments", data = path, replace = TRUE)
 ```
 
 ### data
 
-_Note: Support for inline `data` is currently limited, e.g. JSON object and string are not supported and `schema`, `mediatype` and `format` are ignored._
+::: {.callout-warning}
+Support for inline `data` is currently limited, e.g. JSON object and string are not supported and `schema`, `mediatype` and `format` are ignored.
+:::
 
 `data` is for inline data (included in the `datapackage.json`). `read_resource()` attempts to read `data` if it is provided as a JSON array:
 
@@ -176,7 +182,7 @@ delim | format
 any other value | `"csv"`
 
 ```{r}
-path <- system.file("extdata", "observations_1.tsv", package = "frictionless")
+path <- system.file("extdata", "v1", "observations_1.tsv", package = "frictionless")
 package <- add_resource(package, "observations", data = path, delim = "\t", replace = TRUE)
 package$resources[[2]]$format
 ```
@@ -194,7 +200,7 @@ delim | mediatype
 any other value | `"text/csv"`
 
 ```{r}
-path <- system.file("extdata", "observations_1.tsv", package = "frictionless")
+path <- system.file("extdata", "v1", "observations_1.tsv", package = "frictionless")
 package <- add_resource(package, "observations", data = path, delim = "\t", replace = TRUE)
 package$resources[[2]]$mediatype
 ```
@@ -208,7 +214,7 @@ package$resources[[2]]$mediatype
 `add_resource()` guesses the `encoding` (using `readr::guess_encoding()`) when data are provided as file. It leaves the `encoding` undefined when data are provided as a data frame. `write_package()` sets it to `"utf-8"` when writing to disk.
 
 ```{r}
-path <- system.file("extdata", "deployments.csv", package = "frictionless")
+path <- system.file("extdata", "v1", "deployments.csv", package = "frictionless")
 package <- add_resource(package, "deployments", data = path, delim = ",", replace = TRUE)
 package$resources[[2]]$encoding
 ```

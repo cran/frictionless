@@ -6,7 +6,7 @@ knitr::opts_chunk$set(
 
 ## -----------------------------------------------------------------------------
 library(frictionless)
-file <- system.file("extdata", "datapackage.json", package = "frictionless")
+file <- system.file("extdata", "v1", "datapackage.json", package = "frictionless")
 package <- read_package(file)
 
 ## -----------------------------------------------------------------------------
@@ -21,11 +21,6 @@ create_package()
 
 # From an existing package
 create_package(package)
-
-## ----error = TRUE-------------------------------------------------------------
-invalid_package <- example_package()
-invalid_package$resources <- NULL
-check_package(invalid_package)
 
 ## ----message = FALSE----------------------------------------------------------
 library(dplyr) # Or library(magrittr)

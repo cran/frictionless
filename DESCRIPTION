@@ -1,7 +1,7 @@
 Package: frictionless
 Title: Read and Write Frictionless Data Packages
-Version: 1.2.0
-Date: 2024-08-27
+Version: 1.2.1
+Date: 2025-05-23
 Authors@R: c(
     person("Peter", "Desmet", , "peter.desmet@inbo.be", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-8442-8025", affiliation = "Research Institute for Nature and Forest (INBO)")),
@@ -14,8 +14,8 @@ Authors@R: c(
     person("Kyle", "Husmann", , "kdh38@psu.edu", role = "ctb",
            comment = c(ORCID = "0000-0001-9875-8976", affiliation = "Pennsylvania State University")),
     person("Research Institute for Nature and Forest (INBO)", role = "cph",
-           comment = "https://www.vlaanderen.be/inbo/en-gb/"),
-    person("LifeWatch Belgium", role = "fnd",
+           comment = c(ROR = "00j54wy13")),
+    person("Research Foundation - Flanders", role = "fnd",
            comment = "https://lifewatch.be"),
     person("Beatriz", "Milz", , "milz.bea@gmail.com", role = "rev",
            comment = c(ORCID = "0000-0002-3064-4486")),
@@ -31,7 +31,7 @@ License: MIT + file LICENSE
 URL: https://github.com/frictionlessdata/frictionless-r,
         https://docs.ropensci.org/frictionless/
 BugReports: https://github.com/frictionlessdata/frictionless-r/issues
-Depends: R (>= 3.5.0)
+Depends: R (>= 3.6.0)
 Imports: cli, dplyr, httr, jsonlite, purrr, readr (>= 2.1.0), rlang,
         utils, yaml
 Suggests: hms, knitr, lubridate, rmarkdown, stringi, testthat (>=
@@ -41,22 +41,24 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2024-08-27 09:27:39 UTC; peter_desmet
-Author: Peter Desmet [aut, cre] (<https://orcid.org/0000-0002-8442-8025>,
-    Research Institute for Nature and Forest (INBO)),
-  Damiano Oldoni [aut] (<https://orcid.org/0000-0003-3445-7562>, Research
+Packaged: 2025-05-23 14:45:53 UTC; peter_desmet
+Author: Peter Desmet [aut, cre] (ORCID:
+    <https://orcid.org/0000-0002-8442-8025>, affiliation: Research
     Institute for Nature and Forest (INBO)),
-  Pieter Huybrechts [aut] (<https://orcid.org/0000-0002-6658-6062>,
-    Research Institute for Nature and Forest (INBO)),
-  Sanne Govaert [aut] (<https://orcid.org/0000-0002-8939-1305>, Research
+  Damiano Oldoni [aut] (ORCID: <https://orcid.org/0000-0003-3445-7562>,
+    affiliation: Research Institute for Nature and Forest (INBO)),
+  Pieter Huybrechts [aut] (ORCID:
+    <https://orcid.org/0000-0002-6658-6062>, affiliation: Research
     Institute for Nature and Forest (INBO)),
-  Kyle Husmann [ctb] (<https://orcid.org/0000-0001-9875-8976>,
-    Pennsylvania State University),
-  Research Institute for Nature and Forest (INBO) [cph]
-    (https://www.vlaanderen.be/inbo/en-gb/),
-  LifeWatch Belgium [fnd] (https://lifewatch.be),
-  Beatriz Milz [rev] (<https://orcid.org/0000-0002-3064-4486>),
-  João Martins [rev] (<https://orcid.org/0000-0001-7961-4280>)
+  Sanne Govaert [aut] (ORCID: <https://orcid.org/0000-0002-8939-1305>,
+    affiliation: Research Institute for Nature and Forest (INBO)),
+  Kyle Husmann [ctb] (ORCID: <https://orcid.org/0000-0001-9875-8976>,
+    affiliation: Pennsylvania State University),
+  Research Institute for Nature and Forest (INBO) [cph] (ROR:
+    <https://ror.org/00j54wy13>),
+  Research Foundation - Flanders [fnd] (https://lifewatch.be),
+  Beatriz Milz [rev] (ORCID: <https://orcid.org/0000-0002-3064-4486>),
+  João Martins [rev] (ORCID: <https://orcid.org/0000-0001-7961-4280>)
 Maintainer: Peter Desmet <peter.desmet@inbo.be>
 Repository: CRAN
-Date/Publication: 2024-08-28 08:10:12 UTC
+Date/Publication: 2025-05-23 15:32:01 UTC

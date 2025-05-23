@@ -50,7 +50,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,7 +61,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -346,9 +346,11 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 Dialect</a> (previously called CSV dialect) is a simple format to
 describe the dialect of a tabular data file, including its delimiter,
 header rows, escape characters, etc.</p>
-<p><em>In this document we use the terms “package” for Data Package,
+<div class="callout-info">
+<p>In this document we use the terms “package” for Data Package,
 “resource” for Data Resource, “dialect” for Table Dialect, and “schema”
-for Table Schema.</em></p>
+for Table Schema.</p>
+</div>
 <div id="general-implementation" class="section level2">
 <h2>General implementation</h2>
 <p>Frictionless supports most dialect properties to read <a href="https://specs.frictionlessdata.io/tabular-data-resource/">Tabular
@@ -397,7 +399,7 @@ different from the default <code>&quot;,&quot;</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(frictionless)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">example_package</span>()</span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;observations_1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;frictionless&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;v1&quot;</span>, <span class="st">&quot;observations_1.tsv&quot;</span>, <span class="at">package =</span> <span class="st">&quot;frictionless&quot;</span>)</span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">add_resource</span>(package, <span class="st">&quot;observations&quot;</span>, <span class="at">data =</span> path, <span class="at">delim =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>package<span class="sc">$</span>resources[[<span class="dv">2</span>]]<span class="sc">$</span>dialect<span class="sc">$</span>delimiter</span>
 <span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;\t&quot;</span></span></code></pre></div>
@@ -432,9 +434,12 @@ is passed to <code>escape_double</code> in
 is ignored by <code>read_resource()</code> unless it is
 <code>&quot;\\&quot;</code>. It is passed as <code>escape_backslash = TRUE</code>
 and <code>escape_double = FALSE</code> in
-<code>readr::read_delim()</code>. Note that <code>escapeChar</code> and
-<code>doubleQuote</code> are mutually exclusive, so you cannot escape
-with <code>\&quot;</code> and <code>&quot;&quot;</code> in the same file.</p>
+<code>readr::read_delim()</code>.</p>
+<div class="callout-warning">
+<p><code>escapeChar</code> and <code>doubleQuote</code> are mutually
+exclusive, so you cannot escape with <code>\&quot;</code> and <code>&quot;&quot;</code>
+in the same file.</p>
+</div>
 </div>
 <div id="nullsequence" class="section level3">
 <h3>nullSequence</h3>

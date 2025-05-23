@@ -114,7 +114,7 @@ You can also read data from a local (e.g. downloaded) Data Package. In fact, the
 
 ``` r
 local_package <- read_package(
-  system.file("extdata", "datapackage.json", package = "frictionless")
+  system.file("extdata", "v1", "datapackage.json", package = "frictionless")
 )
 
 local_package
@@ -123,9 +123,6 @@ local_package
 #> • observations
 #> • media
 #> Use `unclass()` to print the Data Package as a list.
-```
-
-``` r
 
 read_resource(local_package, "media")
 #> # A tibble: 3 × 5
@@ -176,7 +173,9 @@ my_package <-
   add_resource(resource_name = "iris", data = iris)
 ```
 
-Note that you can chain most frictionless functions together using pipes (`%>%` or `|>`), which improves readability.
+::: {.callout-info}
+You can chain most frictionless functions together using pipes (`%>%` or `|>`), which improves readability.
+:::
 
 `my_package` now contains one resource:
 
@@ -306,19 +305,19 @@ str(iris_schema)
 #>   .. ..$ description: chr "Iris species."
 ```
 
-Let's add `iris` as a resource to your Data Package again, but this time with the customized schema. Let's also add `title` and `description` as a metadata properties. Note that you have to remove the originally added resource `iris` with `remove_resource()` first, since Data Packages can only contain uniquely named resources:
+Let's add `iris` as a resource to your Data Package again, but this time with the customized schema. You can replace a resource with `replace = TRUE`. Let's also add `title` and `description` as a metadata properties:
 
 
 ``` r
 my_package <-
   my_package %>%
-  remove_resource("iris") %>% # Remove originally added resource
   add_resource(
     resource_name = "iris",
     data = iris,
     schema = iris_schema, # Your customized schema
     title = "Iris dataset", # Your additional metadata
-    description = "The built-in dataset in R."
+    description = "The built-in dataset in R.",
+    replace = TRUE
   )
 ```
 
@@ -327,8 +326,8 @@ If you already have your data stored as CSV or TSV files and you want to include
 
 ``` r
 # Two TSV files with the same structure
-path_1 <- system.file("extdata", "observations_1.tsv", package = "frictionless")
-path_2 <- system.file("extdata", "observations_2.tsv", package = "frictionless")
+path_1 <- system.file("extdata", "v1", "observations_1.tsv", package = "frictionless")
+path_2 <- system.file("extdata", "v1", "observations_2.tsv", package = "frictionless")
 
 # Add both TSV files as a single resource
 my_package <-
@@ -352,7 +351,9 @@ my_package <- append(my_package, c(title = "My package"), after = 1)
 my_package <- create_package(my_package)
 ```
 
-Note that in the above steps you started a Data Package from scratch with `create_package()`, but you can use the same functionality to edit an existing Data Package read with `read_package()`.
+::: {.callout-info}
+In the steps above you started a Data Package from scratch with `create_package()`, but you can use the same functionality to edit an existing Data Package read with `read_package()`.
+:::
 
 ## Write a Data Package
 

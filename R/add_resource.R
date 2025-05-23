@@ -29,8 +29,9 @@
 #'   e.g. `\t` for tab delimited file.
 #'   Will be set as `delimiter` in the resource Table Dialect, so read functions
 #'.  know how to read the file(s).
-#' @param ... Additional metadata properties to add to the resource, e.g.
-#'   `title = "My title", validated = FALSE`.
+#' @param ... Additional [metadata properties](
+#'   https://docs.ropensci.org/frictionless/articles/data-resource.html#properties-implementation)
+#'   to add to the resource, e.g. `title = "My title", validated = FALSE`.
 #'   These are not verified against specifications and are ignored by
 #'   [read_resource()].
 #'   The following properties are automatically set and can't be provided with
@@ -70,8 +71,10 @@
 #' )
 #'
 #' # Replace the resource "observations" with a file-based resource (2 TSV files)
-#' path_1 <- system.file("extdata", "observations_1.tsv", package = "frictionless")
-#' path_2 <- system.file("extdata", "observations_2.tsv", package = "frictionless")
+#' path_1 <-
+#' system.file("extdata", "v1", "observations_1.tsv", package = "frictionless")
+#' path_2 <-
+#' system.file("extdata", "v1", "observations_2.tsv", package = "frictionless")
 #' package <- add_resource(
 #'   package,
 #'   resource_name = "observations",
@@ -153,13 +156,13 @@ add_resource <- function(package, resource_name, data, schema = NULL,
   check_schema(schema, df)
 
   # Check ellipsis
-  if (...length() != length(...names())) {
+  if (length(list(...)) != length(get_dot_names(...))) {
     cli::cli_abort(
       "All arguments in {.arg ...} must be named.",
       class = "frictionless_error_argument_unnamed"
     )
   }
-  properties <- ...names()
+  properties <- get_dot_names(...)
   reserved_properties <- c(
     "name", "path", "profile", "format", "mediatype", "encoding", "dialect"
   ) # data and schema are also reserved, but are named arguments

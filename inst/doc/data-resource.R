@@ -25,7 +25,7 @@ remove_resource(package, "deployments")
 add_resource(package, "iris", data = iris)
 
 # Replace a resource with one where data is stored in a tabular file
-path <- system.file("extdata", "deployments.csv", package = "frictionless")
+path <- system.file("extdata", "v1", "deployments.csv", package = "frictionless")
 add_resource(package, "deployments", data = path, replace = TRUE)
 
 ## -----------------------------------------------------------------------------
@@ -41,7 +41,7 @@ package$resources[[2]]$path
 read_resource(package, "observations")
 
 ## -----------------------------------------------------------------------------
-path <- system.file("extdata", "deployments.csv", package = "frictionless")
+path <- system.file("extdata", "v1", "deployments.csv", package = "frictionless")
 add_resource(package, "deployments", data = path, replace = TRUE)
 
 ## -----------------------------------------------------------------------------
@@ -64,17 +64,17 @@ add_resource(
 )
 
 ## -----------------------------------------------------------------------------
-path <- system.file("extdata", "observations_1.tsv", package = "frictionless")
+path <- system.file("extdata", "v1", "observations_1.tsv", package = "frictionless")
 package <- add_resource(package, "observations", data = path, delim = "\t", replace = TRUE)
 package$resources[[2]]$format
 
 ## -----------------------------------------------------------------------------
-path <- system.file("extdata", "observations_1.tsv", package = "frictionless")
+path <- system.file("extdata", "v1", "observations_1.tsv", package = "frictionless")
 package <- add_resource(package, "observations", data = path, delim = "\t", replace = TRUE)
 package$resources[[2]]$mediatype
 
 ## -----------------------------------------------------------------------------
-path <- system.file("extdata", "deployments.csv", package = "frictionless")
+path <- system.file("extdata", "v1", "deployments.csv", package = "frictionless")
 package <- add_resource(package, "deployments", data = path, delim = ",", replace = TRUE)
 package$resources[[2]]$encoding
 

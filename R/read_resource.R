@@ -28,7 +28,7 @@
 #' @examples
 #' # Read a datapackage.json file
 #' package <- read_package(
-#'   system.file("extdata", "datapackage.json", package = "frictionless")
+#'   system.file("extdata", "v1", "datapackage.json", package = "frictionless")
 #' )
 #'
 #' package
@@ -55,7 +55,11 @@ read_resource <- function(package, resource_name, col_select = NULL) {
 
   # Read data from data
   } else if (resource$read_from == "data") {
-    df <- dplyr::as_tibble(do.call(rbind.data.frame, resource$data))
+    df <- do.call(
+      function(...) rbind.data.frame(..., stringsAsFactors = FALSE),
+      resource$data
+    )
+    df <- dplyr::as_tibble(df)
 
   # Read data from path(s)
   } else if (resource$read_from == "path" || resource$read_from == "url") {
