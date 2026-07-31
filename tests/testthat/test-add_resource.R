@@ -250,7 +250,7 @@ test_that("add_resource() adds resource", {
   expect_identical(p$resources[[4]][["profile"]], "tabular-data-resource")
   expect_identical(p$resources[[4]][["data"]], df)
   expect_identical(
-    resources(p),
+    resource_names(p),
     c("deployments", "observations", "media", "new_df")
   )
 
@@ -261,7 +261,7 @@ test_that("add_resource() adds resource", {
   expect_identical(p$resources[[5]][["profile"]], "tabular-data-resource")
   expect_null(p$resources[[5]][["data"]])
   expect_identical(
-    resources(p),
+    resource_names(p),
     c("deployments", "observations", "media", "new_df", "new_csv")
   )
 })
@@ -273,7 +273,17 @@ test_that("add_resource() can replace an existing resource", {
     add_resource(p, "deployments", df, replace = TRUE)
   )
   p_replaced <- add_resource(p, "deployments", df, replace = TRUE)
-  expect_equal(resources(p), resources(p_replaced))
+  expect_equal(resource_names(p), resource_names(p_replaced))
+})
+
+test_that("add_resource() can add a new resource even with replace = TRUE", {
+  p <- example_package()
+  df <- data.frame("col_1" = c(1, 2), "col_2" = c("a", "b"))
+  expect_no_error(
+    add_resource(p, "new_resource", df, replace = TRUE)
+  )
+  p_replaced <- add_resource(p, "new_resource", df, replace = TRUE)
+  expect_equal(c(resource_names(p), "new_resource"), resource_names(p_replaced))
 })
 
 test_that("add_resource() uses provided schema (list or path) or creates one", {
@@ -294,9 +304,9 @@ test_that("add_resource() uses provided schema (list or path) or creates one", {
   expect_identical(p$resources[[1]]$schema, schema)
   expect_identical(p$resources[[2]]$schema, schema_custom)
   expect_identical(p$resources[[3]]$schema, schema_custom)
-  expect_identical(get_schema(p, "new_df"), schema)
-  expect_identical(get_schema(p, "new_df_with_list_schema"), schema_custom)
-  expect_identical(get_schema(p, "new_df_with_file_schema"), schema_custom)
+  expect_identical(schema(p, "new_df"), schema)
+  expect_identical(schema(p, "new_df_with_list_schema"), schema_custom)
+  expect_identical(schema(p, "new_df_with_file_schema"), schema_custom)
 
   # csv
   p <- add_resource(p, "new_csv", df)
@@ -305,9 +315,20 @@ test_that("add_resource() uses provided schema (list or path) or creates one", {
   expect_identical(p$resources[[4]]$schema, schema)
   expect_identical(p$resources[[5]]$schema, schema_custom)
   expect_identical(p$resources[[6]]$schema, schema_custom)
-  expect_identical(get_schema(p, "new_csv"), schema)
-  expect_identical(get_schema(p, "new_csv_with_list_schema"), schema_custom)
-  expect_identical(get_schema(p, "new_csv_with_file_schema"), schema_custom)
+  expect_identical(schema(p, "new_csv"), schema)
+  expect_identical(schema(p, "new_csv_with_list_schema"), schema_custom)
+  expect_identical(schema(p, "new_csv_with_file_schema"), schema_custom)
+})
+
+test_that("add_resource() keeps URL schema as URL", {
+  p <- example_package()
+  deployments <- read_resource(p, "deployments")
+  schema_url <- file.path(
+    "https://raw.githubusercontent.com/frictionlessdata/frictionless-r",
+    "main/tests/testthat/data/deployments_schema.json"
+  )
+  p <- add_resource(p, "deployments", deployments, schema_url, replace = TRUE)
+  expect_identical(p$resources[[1]]$schema, schema_url)
 })
 
 test_that("add_resource() can add resource from data frame, readable by
@@ -322,7 +343,7 @@ test_that("add_resource() can add resource from local, relative, absolute,
            remote or compressed CSV file, readable by read_resource()", {
   skip_if_offline()
   p <- example_package()
-  schema <- get_schema(p, "deployments")
+  schema <- schema(p, "deployments")
 
   # Local
   local_path <- "data/df.csv"

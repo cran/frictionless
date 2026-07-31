@@ -14,8 +14,8 @@
 #' @param data Data to attach, either a data frame or path(s) to CSV file(s):
 #'   - Data frame: attached to the resource as `data` and written to a CSV file
 #'     when using [write_package()].
-#'   - One or more paths to CSV file(s) as a character (vector): added to the
-#'     resource as `path`.
+#'   - One or more paths or URLs to CSV files as a character (vector): added to
+#'     the resource as `path`.
 #'     The last file will be read with [readr::read_delim()] to create or
 #'     compare with `schema` and to set `format`, `mediatype` and `encoding`.
 #'     The other files are ignored, but are expected to have the same structure
@@ -23,12 +23,13 @@
 #' @param schema Either a list, or path or URL to a JSON file describing a Table
 #'   Schema for the `data`.
 #'   If not provided, one will be created using [create_schema()].
-#' @param replace If `TRUE`, the added resource will replace an existing
-#'   resource with the same name.
-#' @param delim Single character used to separate the fields in the CSV file(s),
-#'   e.g. `\t` for tab delimited file.
+#' @param replace If `TRUE`, allows an existing resource of the same name to be
+#'   replaced.
+#' @param delim Delimiter for the CSV file(s) referenced in `data` (e.g. `\t`
+#'   for a tab-separated file).
 #'   Will be set as `delimiter` in the resource Table Dialect, so read functions
-#'.  know how to read the file(s).
+#'   know how to read the file(s).
+#'   Ignored if `data` is a data frame.
 #' @param ... Additional [metadata properties](
 #'   https://docs.ropensci.org/frictionless/articles/data-resource.html#properties-implementation)
 #'   to add to the resource, e.g. `title = "My title", validated = FALSE`.
@@ -37,7 +38,7 @@
 #'   The following properties are automatically set and can't be provided with
 #'   `...`: `name`, `data`, `path`, `schema`, `profile`, `format`, `mediatype`,
 #'   `encoding` and `dialect`.
-#' @return `package` with one additional resource.
+#' @returns `package` with one additional resource.
 #' @family edit functions
 #' @export
 #' @examples
@@ -45,7 +46,7 @@
 #' package <- example_package()
 #'
 #' # List the resources
-#' resources(package)
+#' resource_names(package)
 #'
 #' # Create a data frame
 #' df <- data.frame(
@@ -72,9 +73,9 @@
 #'
 #' # Replace the resource "observations" with a file-based resource (2 TSV files)
 #' path_1 <-
-#' system.file("extdata", "v1", "observations_1.tsv", package = "frictionless")
+#'   system.file("extdata", "v1", "observations_1.tsv", package = "frictionless")
 #' path_2 <-
-#' system.file("extdata", "v1", "observations_2.tsv", package = "frictionless")
+#'   system.file("extdata", "v1", "observations_2.tsv", package = "frictionless")
 #' package <- add_resource(
 #'   package,
 #'   resource_name = "observations",
@@ -84,7 +85,7 @@
 #' )
 #'
 #' # List the resources ("positions" and "positions_with_schema" added)
-#' resources(package)
+#' resource_names(package)
 add_resource <- function(package, resource_name, data, schema = NULL,
                          replace = FALSE, delim = ",", ...) {
   # Check package
@@ -111,7 +112,7 @@ add_resource <- function(package, resource_name, data, schema = NULL,
   }
 
   # Check resource does not exist yet for replace = FALSE
-  if (!replace && resource_name %in% resources(package)) {
+  if (!replace && resource_name %in% resource_names(package)) {
     cli::cli_abort(
       c(
         "{.arg package} already contains a resource named
@@ -144,12 +145,13 @@ add_resource <- function(package, resource_name, data, schema = NULL,
     )
   }
 
-  # Create schema
-  if (is.null(schema)) {
-    schema <- create_schema(df)
-  } else if (is.character(schema)) {
-    # Path to schema can be unsafe, since schema will be verbosely included
+  # Read schema if path or URL, create schema if undefined (leave as is if list)
+  schema_url <- NULL
+  if (is.character(schema)) {
+    schema_url <- if (is_url(schema)) schema # Keep original URL
     schema <- read_descriptor(schema, safe = FALSE)
+  } else if (is.null(schema)) {
+    schema <- create_schema(df)
   }
 
   # Check schema (also checks df)
@@ -189,7 +191,7 @@ add_resource <- function(package, resource_name, data, schema = NULL,
       encoding = NULL,
       dialect = NULL,
       ...,
-      schema = schema
+      schema = schema_url %||% schema
     )
   } else {
     resource <- list(
@@ -201,21 +203,23 @@ add_resource <- function(package, resource_name, data, schema = NULL,
       encoding = if (encoding == "ASCII") "UTF-8" else encoding, # UTF-8 = safer
       dialect = NULL,
       ...,
-      schema = schema
+      schema = schema_url %||% schema
     )
     # Add CSV dialect for non-default delimiter or remove it
     resource$dialect <- if (delim != ",") list(delimiter = delim) else NULL
 
-    # Set attribute for get_resource()
+    # Set attribute for resource()
     attr(resource, "path") <- "added"
   }
 
-  # Add or replace resource (needs to be wrapped in its own list)
-  if (replace) {
-    index <- which(purrr::map(package$resources, "name") == resource_name)
-    package$resources[index] <- list(resource)
-  } else {
+  # Add or replace resource
+  index <- which(resource_names(package) == resource_name)
+  if (length(index) == 0) {
+    # Add resource if it does not exist (also for replace = TRUE)
     package$resources <- append(package$resources, list(resource))
+  } else {
+    # Replace existing resource (not done for replace = FALSE, see higher)
+    package$resources[[index]] <- resource
   }
 
   return(package)

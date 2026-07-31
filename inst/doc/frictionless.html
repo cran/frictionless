@@ -49,8 +49,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,7 +62,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -365,7 +366,7 @@ descriptor file published on <a href="https://doi.org/10.5281/zenodo.10053702">Z
 <code>datapackage</code>. When printing a Data Package, you get a
 summary of its contents:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>package</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; A Data Package with 3 resources:</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#&gt; A Data Package (version 1.0) with 3 resources:</span></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt; • reference-data</span></span>
 <span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; • gps</span></span>
 <span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; • acceleration</span></span>
@@ -374,7 +375,7 @@ summary of its contents:</p>
 <p>Since a Data Package is a list, you can pass it to functions that
 work on lists, such as <code>str()</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">str</span>(package, <span class="at">list.len =</span> <span class="dv">3</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; List of 4</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; List of 3</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;  $ id       : chr &quot;https://doi.org/10.5281/zenodo.10053702&quot;</span></span>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;  $ profile  : chr &quot;tabular-data-package&quot;</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;  $ resources:List of 3</span></span>
@@ -385,20 +386,26 @@ work on lists, such as <code>str()</code>:</p>
 <span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt;   .. .. [list output truncated]</span></span>
 <span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 7</span></span>
 <span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name     : chr &quot;gps&quot;</span></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;   .. ..$ path     : chr [1:3] &quot;O_WESTERSCHELDE-gps-2018.csv.gz&quot; &quot;O_WESTERSCHELDE-gps-2019.csv.gz&quot; &quot;O_WESTERSCHELDE-gps-2020.csv.gz&quot;</span></span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;   .. ..$ profile  : chr &quot;tabular-data-resource&quot;</span></span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt;   .. .. [list output truncated]</span></span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 7</span></span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name     : chr &quot;acceleration&quot;</span></span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt;   .. ..$ path     : chr [1:3] &quot;O_WESTERSCHELDE-acceleration-2018.csv.gz&quot; &quot;O_WESTERSCHELDE-acceleration-2019.csv.gz&quot; &quot;O_WESTERSCHELDE-acceleration-2020.csv.gz&quot;</span></span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt;   .. ..$ profile  : chr &quot;tabular-data-resource&quot;</span></span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt;   .. .. [list output truncated]</span></span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt;   [list output truncated]</span></span>
-<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt;  - attr(*, &quot;class&quot;)= chr [1:2] &quot;datapackage&quot; &quot;list&quot;</span></span></code></pre></div>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;   .. ..$ path     :List of 3</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ : chr &quot;O_WESTERSCHELDE-gps-2018.csv.gz&quot;</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ : chr &quot;O_WESTERSCHELDE-gps-2019.csv.gz&quot;</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ : chr &quot;O_WESTERSCHELDE-gps-2020.csv.gz&quot;</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt;   .. ..$ profile  : chr &quot;tabular-data-resource&quot;</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt;   .. .. [list output truncated]</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 7</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name     : chr &quot;acceleration&quot;</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt;   .. ..$ path     :List of 3</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ : chr &quot;O_WESTERSCHELDE-acceleration-2018.csv.gz&quot;</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ : chr &quot;O_WESTERSCHELDE-acceleration-2019.csv.gz&quot;</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ : chr &quot;O_WESTERSCHELDE-acceleration-2020.csv.gz&quot;</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="co">#&gt;   .. ..$ profile  : chr &quot;tabular-data-resource&quot;</span></span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt;   .. .. [list output truncated]</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="co">#&gt;  - attr(*, &quot;directory&quot;)= chr &quot;https://zenodo.org/records/10053702/files&quot;</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="co">#&gt;  - attr(*, &quot;class&quot;)= chr [1:2] &quot;datapackage&quot; &quot;list&quot;</span></span></code></pre></div>
 <p>The most important aspect of a Data Package are its <strong>Data
 Resources</strong>, which describe and point to the data. You can list
-all included resources with <code>resources()</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">resources</span>(package)</span>
+all included resources with <code>resource_names()</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">resource_names</span>(package)</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;reference-data&quot; &quot;gps&quot;            &quot;acceleration&quot;</span></span></code></pre></div>
 <p>This Data Package has 3 resources. Let’s read the data from the
 <code>gps</code> resource into a data frame:</p>
@@ -437,7 +444,7 @@ disk:</p>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>)</span>
 <span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
 <span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>local_package</span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; A Data Package with 3 resources:</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; A Data Package (version 1.0) with 3 resources:</span></span>
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; • deployments</span></span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; • observations</span></span>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">#&gt; • media</span></span>
@@ -460,7 +467,7 @@ automatically detect where to read data from.</p>
 <p>Data Package is a good format to technically describe your data,
 e.g. if you are planning to deposit it on research repository. It also
 goes a long way meeting <a href="https://www.go-fair.org/fair-principles/">FAIR principles</a>.</p>
-<p>Frictionless assumes your data are stored as a data frame or CSV
+<p>frictionless assumes your data are stored as a data frame or CSV
 files. Let’s use the built-in dataset <code>iris</code> as your data
 frame:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Show content of the data frame &quot;iris&quot;</span></span>
@@ -481,30 +488,26 @@ frame:</p>
 <span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; # ℹ 140 more rows</span></span></code></pre></div>
 <p>Create a Data Package with <code>create_package()</code> and add your
 data frame as a resource with the name <code>iris</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Load dplyr or magrittr to support %&gt;% pipes</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">library</span>(dplyr, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>) <span class="co"># or library(magrittr)</span></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>my_package <span class="ot">&lt;-</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">create_package</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="at">resource_name =</span> <span class="st">&quot;iris&quot;</span>, <span class="at">data =</span> iris)</span></code></pre></div>
-<div class="callout-info">
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>my_package <span class="ot">&lt;-</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">create_package</span>() <span class="sc">|&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">add_resource</span>(<span class="at">resource_name =</span> <span class="st">&quot;iris&quot;</span>, <span class="at">data =</span> iris)</span></code></pre></div>
+<div class="callout-note">
 <p>You can chain most frictionless functions together using pipes
-(<code>%&gt;%</code> or <code>|&gt;</code>), which improves
-readability.</p>
+(<code>|&gt;</code>), which improves readability.</p>
 </div>
 <p><code>my_package</code> now contains one resource:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>my_package</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; A Data Package with 1 resource:</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; A Data Package (version 1.0) with 1 resource:</span></span>
 <span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; • iris</span></span>
 <span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; Use `unclass()` to print the Data Package as a list.</span></span></code></pre></div>
 <p>By default, <code>add_resource()</code> will create a <strong>Table
 Schema</strong> for your data frame, describing its field names, field
 types and (for factors) constraints. You can retrieve the schema of a
-resource with <code>get_schema()</code>. It is a list, which we print
-here using <code>str()</code>:</p>
+resource with <code>schema()</code>. It is a list, which we print here
+using <code>str()</code>:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>iris_schema <span class="ot">&lt;-</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  my_package <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">get_schema</span>(<span class="st">&quot;iris&quot;</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  my_package <span class="sc">|&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">schema</span>(<span class="st">&quot;iris&quot;</span>)</span>
 <span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a></span>
 <span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">str</span>(iris_schema)</span>
 <span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; List of 1</span></span>
@@ -525,7 +528,10 @@ here using <code>str()</code>:</p>
 <span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;Species&quot;</span></span>
 <span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
 <span id="cb11-23"><a href="#cb11-23" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 1</span></span>
-<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum: chr [1:3] &quot;setosa&quot; &quot;versicolor&quot; &quot;virginica&quot;</span></span></code></pre></div>
+<span id="cb11-24"><a href="#cb11-24" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum:List of 3</span></span>
+<span id="cb11-25"><a href="#cb11-25" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;setosa&quot;</span></span>
+<span id="cb11-26"><a href="#cb11-26" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;versicolor&quot;</span></span>
+<span id="cb11-27"><a href="#cb11-27" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;virginica&quot;</span></span></code></pre></div>
 <p>You can also create a schema from a data frame, using
 <code>create_schema()</code>:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>iris_schema <span class="ot">&lt;-</span> <span class="fu">create_schema</span>(iris)</span>
@@ -549,7 +555,10 @@ here using <code>str()</code>:</p>
 <span id="cb12-19"><a href="#cb12-19" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;Species&quot;</span></span>
 <span id="cb12-20"><a href="#cb12-20" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
 <span id="cb12-21"><a href="#cb12-21" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 1</span></span>
-<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum: chr [1:3] &quot;setosa&quot; &quot;versicolor&quot; &quot;virginica&quot;</span></span></code></pre></div>
+<span id="cb12-22"><a href="#cb12-22" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum:List of 3</span></span>
+<span id="cb12-23"><a href="#cb12-23" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;setosa&quot;</span></span>
+<span id="cb12-24"><a href="#cb12-24" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;versicolor&quot;</span></span>
+<span id="cb12-25"><a href="#cb12-25" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;virginica&quot;</span></span></code></pre></div>
 <p>Doing so allows you to customize the schema before adding the
 resource. E.g. let’s add a description for
 <code>Sepal.Length</code>:</p>
@@ -601,14 +610,17 @@ multiple elements at once:</p>
 <span id="cb14-37"><a href="#cb14-37" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;Species&quot;</span></span>
 <span id="cb14-38"><a href="#cb14-38" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
 <span id="cb14-39"><a href="#cb14-39" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 1</span></span>
-<span id="cb14-40"><a href="#cb14-40" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum: chr [1:3] &quot;setosa&quot; &quot;versicolor&quot; &quot;virginica&quot;</span></span>
-<span id="cb14-41"><a href="#cb14-41" tabindex="-1"></a><span class="co">#&gt;   .. ..$ description: chr &quot;Iris species.&quot;</span></span></code></pre></div>
+<span id="cb14-40"><a href="#cb14-40" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum:List of 3</span></span>
+<span id="cb14-41"><a href="#cb14-41" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;setosa&quot;</span></span>
+<span id="cb14-42"><a href="#cb14-42" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;versicolor&quot;</span></span>
+<span id="cb14-43"><a href="#cb14-43" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;virginica&quot;</span></span>
+<span id="cb14-44"><a href="#cb14-44" tabindex="-1"></a><span class="co">#&gt;   .. ..$ description: chr &quot;Iris species.&quot;</span></span></code></pre></div>
 <p>Let’s add <code>iris</code> as a resource to your Data Package again,
 but this time with the customized schema. You can replace a resource
 with <code>replace = TRUE</code>. Let’s also add <code>title</code> and
 <code>description</code> as a metadata properties:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>my_package <span class="ot">&lt;-</span></span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  my_package <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  my_package <span class="sc">|&gt;</span></span>
 <span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="fu">add_resource</span>(</span>
 <span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>    <span class="at">resource_name =</span> <span class="st">&quot;iris&quot;</span>,</span>
 <span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>    <span class="at">data =</span> iris,</span>
@@ -627,7 +639,7 @@ automatically or provide your own.</p>
 <span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a></span>
 <span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co"># Add both TSV files as a single resource</span></span>
 <span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>my_package <span class="ot">&lt;-</span></span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>  my_package <span class="sc">%&gt;%</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>  my_package <span class="sc">|&gt;</span></span>
 <span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>  <span class="fu">add_resource</span>(</span>
 <span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>    <span class="at">resource_name =</span> <span class="st">&quot;observations&quot;</span>,</span>
 <span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">c</span>(path_1, path_2),</span>
@@ -645,7 +657,7 @@ property:</p>
 <span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co"># Warning: append() drops the custom datapackage class.</span></span>
 <span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co"># It can be added again by running my_package through create_package()</span></span>
 <span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>my_package <span class="ot">&lt;-</span> <span class="fu">create_package</span>(my_package)</span></code></pre></div>
-<div class="callout-info">
+<div class="callout-note">
 <p>In the steps above you started a Data Package from scratch with
 <code>create_package()</code>, but you can use the same functionality to
 edit an existing Data Package read with <code>read_package()</code>.</p>
@@ -662,7 +674,7 @@ resource <code>iris</code> and two TSV files containing the data for the
 resource <code>observations</code>.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">list.files</span>(<span class="st">&quot;my_directory&quot;</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;datapackage.json&quot;   &quot;iris.csv&quot;           &quot;observations_1.tsv&quot; &quot;observations_2.tsv&quot;</span></span></code></pre></div>
-<p>Frictionless does not provide functionality to deposit your Data
+<p>frictionless does not provide functionality to deposit your Data
 Package on a research repository such as <a href="https://zenodo.org">Zenodo</a>, but here are some tips:</p>
 <ol style="list-style-type: decimal">
 <li>Validate your Data Package before depositing. You can do this in

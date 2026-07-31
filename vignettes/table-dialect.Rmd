@@ -17,13 +17,13 @@ knitr::opts_chunk$set(
 
 [Table Dialect](https://specs.frictionlessdata.io/csv-dialect/) (previously called CSV dialect) is a simple format to describe the dialect of a tabular data file, including its delimiter, header rows, escape characters, etc.
 
-::: {.callout-info}
+::: {.callout-note}
 In this document we use the terms "package" for Data Package, "resource" for Data Resource, "dialect" for Table Dialect, and "schema" for Table Schema.
 :::
 
 ## General implementation
 
-Frictionless supports most dialect properties to read [Tabular Data Resources](https://specs.frictionlessdata.io/tabular-data-resource/). Dialect manipulation is limited to setting a `delimiter`. When writing resources, it (mainly) makes uses of default dialect properties, removing the necessity to define them.
+frictionless supports most dialect properties to read [Tabular Data Resources](https://specs.frictionlessdata.io/tabular-data-resource/). Dialect manipulation is limited to setting a `delimiter`. When writing resources, it (mainly) makes uses of default dialect properties, removing the necessity to define them.
 
 ### Read
 
@@ -38,7 +38,7 @@ Frictionless supports most dialect properties to read [Tabular Data Resources](h
 
 ### Manipulate
 
-Frictionless does not support direct manipulation of the dialect. `add_resource()` allows to set one property (`dialect$delimiter`) when data are provided as a file, all other properties are assumed to be the default.
+frictionless does not support direct manipulation of the dialect. `add_resource()` allows to set one property (`dialect$delimiter`) when data are provided as a file, all other properties are assumed to be the default.
 
 ### Write
 

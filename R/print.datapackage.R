@@ -6,7 +6,7 @@
 #' @param x Data Package object, as returned by [read_package()] or
 #'   [create_package()].
 #' @param ... Further arguments, they are ignored by this function.
-#' @return [print()] with a summary of the Data Package object.
+#' @returns [print()] with a summary of the Data Package object.
 #' @family print functions
 #' @export
 #' @examples
@@ -18,13 +18,16 @@
 print.datapackage <- function(x, ...) {
   # All prints should use cat (= cli::cat() helpers)
 
-  # List resources
-  resource_names <- resources(x)
+  # Intro sentence
+  version <- version(x)
+  resource_names <- resource_names(x) # Calls check_package()
   cli::cat_line(
     cli::format_inline(
-      "A Data Package with {length(resource_names)} resource{?s}{?./:/:}"
+      "A Data Package (version {.field {version}}) with {length(resource_names)} resource{?s}{?./:/:}" # nolint
     )
   )
+
+  # List resources
   if (length(resource_names) > 0) {
     cli::cat_bullet(resource_names, bullet = "bullet")
   }

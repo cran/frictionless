@@ -24,16 +24,16 @@ described \code{resources}.
 package <- example_package()
 
 # List the resources
-resources(package)
+resource_names(package)
 
 # Remove the resource "observations"
 package <- remove_resource(package, "observations")
 
 # List the resources ("observations" removed)
-resources(package)
+resource_names(package)
 }
 \seealso{
-Other edit functions: 
-\code{\link{add_resource}()}
+Other edit functions:
+\code{\link[=add_resource]{add_resource()}}
 }
 \concept{edit functions}

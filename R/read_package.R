@@ -8,7 +8,7 @@
 #' Data Package standard.
 #'
 #' @param file Path or URL to a `datapackage.json` file.
-#' @return A Data Package object, see [create_package()].
+#' @returns A Data Package object, see [create_package()].
 #' @family read functions
 #' @export
 #' @examples
@@ -44,8 +44,18 @@ read_package <- function(file = "datapackage.json") {
     )
   }
 
+  # Warn if version >= 1.0
+  version <- version(descriptor)
+  if (version != "1.0") {
+    cli::cli_warn(
+      "This Data Package uses a version ({.field {version}}) not supported by
+       this version of {.pkg frictionless}. Expect errors.",
+      class = "frictionless_warning_version_not_supported"
+    )
+  }
+
   # Add directory
-  descriptor$directory <- dirname(file) # Also works for URLs
+  attr(descriptor, "directory") <- dirname(file) # Also works for URLs
 
   # Create package
   create_package(descriptor)

@@ -1,6 +1,6 @@
 #' Get the Table Schema of a Data Resource
 #'
-#' Returns the Table Schema of a Data Resource (in a Data Package), i.e. the
+#' Gets the Table Schema of a Data Resource (in a Data Package), i.e. the
 #' content of its `schema` property, describing the resource's fields, data
 #' types, relationships, and missing values.
 #' The resource must be a [Tabular Data Resource](
@@ -9,7 +9,7 @@
 #' See `vignette("table-schema")` to learn more about Table Schema.
 #'
 #' @inheritParams read_resource
-#' @return List describing a Table Schema.
+#' @returns List describing a Table Schema.
 #' @family accessor functions
 #' @export
 #' @examples
@@ -17,11 +17,11 @@
 #' package <- example_package()
 #'
 #' # Get the Table Schema for the resource "observations"
-#' schema <- get_schema(package, "observations")
+#' schema <- schema(package, "observations")
 #' str(schema)
-get_schema <- function(package, resource_name) {
+schema <- function(package, resource_name) {
   # Get resource
-  resource <- get_resource(package, resource_name)
+  resource <- resource(package, resource_name)
 
   # Check resource is tabular-data-resource (expected for resources with schema)
   if (resource$profile %||% "" != "tabular-data-resource") {
@@ -39,7 +39,11 @@ get_schema <- function(package, resource_name) {
       class = "frictionless_error_resource_without_schema"
     )
   }
-  schema <- read_descriptor(resource$schema, package$directory, safe = TRUE)
+  schema <- read_descriptor(
+    resource$schema,
+    attr(package, "directory"),
+    safe = TRUE
+  )
 
   # Check schema
   check_schema(schema)

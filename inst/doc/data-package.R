@@ -25,9 +25,9 @@ create_package(package)
 ## ----message = FALSE----------------------------------------------------------
 library(dplyr) # Or library(magrittr)
 my_package <-
-  create_package() %>%
-  add_resource(resource_name = "iris", data = iris) %>%
-  append(c("title" = "my_package"), after = 0) %>%
+  create_package() |>
+  add_resource(resource_name = "iris", data = iris) |>
+  append(c("title" = "my_package"), after = 0) |>
   create_package() # To add the datapackage class again
 my_package
 

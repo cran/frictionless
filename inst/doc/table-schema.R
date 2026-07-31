@@ -9,7 +9,7 @@ library(frictionless)
 package <- example_package()
 
 # Get the Table Schema for the resource "observations"
-schema <- get_schema(package, "observations")
+schema <- schema(package, "observations")
 str(schema)
 
 ## -----------------------------------------------------------------------------

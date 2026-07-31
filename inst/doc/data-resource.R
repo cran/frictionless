@@ -9,7 +9,15 @@ library(frictionless)
 package <- example_package()
 
 # List the resources
-resources(package)
+resource_names(package)
+
+## -----------------------------------------------------------------------------
+# Get the resource "deployments"
+resource <- resource(package, "deployments")
+str(resource)
+
+## -----------------------------------------------------------------------------
+resource(package, "deployments") <- resource
 
 ## -----------------------------------------------------------------------------
 read_resource(package, "deployments")

@@ -49,8 +49,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,7 +62,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -346,14 +347,14 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 Dialect</a> (previously called CSV dialect) is a simple format to
 describe the dialect of a tabular data file, including its delimiter,
 header rows, escape characters, etc.</p>
-<div class="callout-info">
+<div class="callout-note">
 <p>In this document we use the terms “package” for Data Package,
 “resource” for Data Resource, “dialect” for Table Dialect, and “schema”
 for Table Schema.</p>
 </div>
 <div id="general-implementation" class="section level2">
 <h2>General implementation</h2>
-<p>Frictionless supports most dialect properties to read <a href="https://specs.frictionlessdata.io/tabular-data-resource/">Tabular
+<p>frictionless supports most dialect properties to read <a href="https://specs.frictionlessdata.io/tabular-data-resource/">Tabular
 Data Resources</a>. Dialect manipulation is limited to setting a
 <code>delimiter</code>. When writing resources, it (mainly) makes uses
 of default dialect properties, removing the necessity to define
@@ -364,14 +365,14 @@ them.</p>
 of a resource to parse a tabular data file. Only properties that deviate
 from the default need to be specified. E.g. a tab-delimited file without
 header rows must have the following dialect:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="er">&quot;dialect&quot;:</span> <span class="fu">{</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="st">&quot;dialect&quot;</span><span class="er">:</span> <span class="fu">{</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>  <span class="dt">&quot;delimiter&quot;</span><span class="fu">:</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span><span class="fu">,</span></span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="dt">&quot;header&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 </div>
 <div id="manipulate" class="section level3">
 <h3>Manipulate</h3>
-<p>Frictionless does not support direct manipulation of the dialect.
+<p>frictionless does not support direct manipulation of the dialect.
 <code>add_resource()</code> allows to set one property
 (<code>dialect$delimiter</code>) when data are provided as a file, all
 other properties are assumed to be the default.</p>

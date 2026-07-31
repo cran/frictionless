@@ -2,23 +2,64 @@
 #'
 #' Writes a Data Package and its related Data Resources to disk as a
 #' `datapackage.json` and CSV files.
-#' Already existing CSV files of the same name will not be overwritten.
-#' The function can also be used to download a Data Package in its entirety.
-#' The Data Resources are handled as follows:
-#' - Resource `path` has at least one local path (e.g. `deployments.csv`):
-#'   CSV files are copied or downloaded to `directory` and `path` points to new
-#'   location of file(s).
-#' - Resource `path` has only URL(s): resource stays as is.
-#' - Resource has inline `data` originally: resource stays as is.
-#' - Resource has inline `data` as result of adding data with [add_resource()]:
-#'   data are written to a CSV file using [readr::write_csv()], `path` points to
-#'   location of file, `data` property is removed.
-#'   Use `compress = TRUE` to gzip those CSV files.
+#'
+#' @section Writing data to CSV files:
+#'
+#' `write_package()` will write data to CSV files depending on how these are
+#' attached to the Data Resource:
+#'
+#' - **Data frame**:
+#'   ```R
+#'   add_resource(package, "media", data = df)
+#'   ```
+#'   Data are written to a CSV file in `directory` using [readr::write_csv()].
+#'   The CSV file will have the same name as the resource, overwriting any
+#'   existing file with the same name.
+#'   Use `compress = TRUE` to gzip the CSV file.
+#'
+#' - One or more **paths** to local CSV files in a **different directory**:
+#'   ```R
+#'   add_resource(package, "media", data = "other-directory/media.csv")
+#'   ```
+#'   CSV files are copied to `directory`, overwriting existing files with
+#'   the same name.
+#'
+#' - One or more **paths** to local CSV files in the **same directory**:
+#'   ```R
+#'   add_resource(package, "media", data = "directory/media.csv")
+#'   ```
+#'   CSV files are left as is (no overwrite).
+#'   This allows you to read and write a `datapackage.json` to the same
+#'   directory, without altering the CSV files of resources you did not
+#'   manipulate.
+#'
+#' - One or more **URLs** to CSV files:
+#'   ```
+#'   add_resource(package, "media", data = "https://example.org/media.csv")
+#'   ```
+#'   Files are not downloaded.
+#'
+#' - Mix of **URLs and paths** to CSV files:
+#'   ```R
+#'   add_resource(
+#'     package, "media",
+#'     data = c("https://example.org/media.csv", "media.csv")
+#'   )
+#'   ```
+#'   Remote CSV files are downloaded to `directory`, overwriting existing
+#'   files with the same name.
+#'   Local CSV files are handled as described above.
+#'
+#' - **Inline data**: No files are written.
+#'
+#' In all above cases `path` is added or updated to the new file location(s)
+#' when appropriate.
+#'
 #' @inheritParams read_resource
 #' @param directory Path to local directory to write files to.
 #' @param compress If `TRUE`, data of added resources will be gzip compressed
 #'   before being written to disk (e.g. `deployments.csv.gz`).
-#' @return `package` invisibly, as written to file.
+#' @returns `package` invisibly, as written to file.
 #' @family write functions
 #' @export
 #' @examples
@@ -73,7 +114,7 @@ write_package <- function(package, directory, compress = FALSE) {
   return_package <- package # Needs directory to remain valid
 
   # Write datapackage.json
-  package$directory <- NULL
+  attr(package, "directory") <- NULL
   package_json <- jsonlite::toJSON(
     package,
     pretty = TRUE,

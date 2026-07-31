@@ -4,17 +4,18 @@
 #'
 #' @inheritParams read_resource
 #' @inheritParams write_package
-#' @return Updated list describing a Data Resource, ready to be included in a
+#' @returns Updated list describing a Data Resource, ready to be included in a
 #'   `datapackage.json`.
 #' @family write functions
 #' @noRd
 write_resource <- function(package, resource_name, directory = ".",
                            compress = FALSE) {
   # Get resource, includes check_package()
-  resource <- get_resource(package, resource_name)
+  resource <- resource(package, resource_name)
 
   # Resource contains new data
-  if (resource$read_from == "df") {
+  data_location <- attr(resource, "data_location")
+  if (data_location == "df") {
     if (compress) {
       file_name <- paste(resource_name, "csv", "gz", sep = ".")
     } else {
@@ -28,21 +29,20 @@ write_resource <- function(package, resource_name, directory = ".",
     resource$mediatype <- "text/csv"
     resource$encoding <- "utf-8" # Enforced by readr::write_csv()
     resource$dialect <- NULL
-    resource$read_from <- NULL
     resource$data <- NULL
 
   # Resource originally had data property
-  } else if (resource$read_from == "data") {
-    resource$read_from <- NULL
+  } else if (data_location == "data") {
+    # Do nothing
 
   # Resource has local paths (optionally mixed with URLs)
-  } else if (resource$read_from == "path") {
-    # Download or copy file to directory, point path to file name (in that dir)
-    # Note that existing files will not be overwritten
+  } else if (data_location == "path") {
     out_paths <- vector()
     for (path in resource$path) {
       file_name <- basename(path)
       destination <- file.path(directory, file_name)
+
+      # Download file to destination
       if (is_url(path)) {
         if (!file.exists(destination)) {
           cli::cli_inform(
@@ -51,19 +51,29 @@ write_resource <- function(package, resource_name, directory = ".",
           )
           utils::download.file(path, destination, quiet = TRUE)
         }
+
+      # Copy file to destination, but don't overwrite if it was read from there
       } else {
+        if (path != destination && file.exists(destination)) {
+          file.remove(destination)
+        }
         file.copy(path, destination, overwrite = FALSE)
       }
       out_paths <- append(out_paths, file_name)
     }
-    resource$read_from <- NULL
+    if (length(out_paths) > 1) {
+      # String for single file, pretty array for multiple files
+      out_paths <- as.list(out_paths)
+    }
     resource$path <- out_paths
 
   # Resource has URL paths (only)
-  } else if (resource$read_from == "url") {
+  } else if (data_location == "url") {
     # Don't touch file, leave URL path as is
-    resource$read_from <- NULL
   }
+
+  # Remove attributes
+  attr(resource, "data_location") <- NULL
 
   return(resource)
 }

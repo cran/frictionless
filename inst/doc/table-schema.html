@@ -49,8 +49,9 @@ overflow: visible;
 }
 </style>
 <style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,7 +62,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -345,28 +346,27 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <p><a href="https://specs.frictionlessdata.io/table-schema/">Table
 Schema</a> is a simple format to describe tabular data, including field
 names, types, constraints, missing values, foreign keys, etc.</p>
-<div class="callout-info">
+<div class="callout-note">
 <p>In this document we use the terms “package” for Data Package,
 “resource” for Data Resource, “dialect” for Table Dialect, and “schema”
 for Table Schema.</p>
 </div>
 <div id="general-implementation" class="section level2">
 <h2>General implementation</h2>
-<p>Frictionless supports <code>schema$fields</code> and
+<p>frictionless supports <code>schema$fields</code> and
 <code>schema$missingValues</code> to parse data types and missing values
 when reading <a href="https://specs.frictionlessdata.io/tabular-data-resource/">Tabular
-Data Resources</a>. Schema manipulation is limited to extracting a
-schema from a resource, creating one from a data frame, and providing
-one back to a resource. Schema metadata is including when writing a
-package.</p>
-<div id="read" class="section level3">
-<h3>Read</h3>
-<p><code>get_schema()</code> extracts the schema from a resource:</p>
+Data Resources</a>. Schema manipulation is limited to getting a schema
+from a resource, creating one from a data frame, and providing one back
+to a resource. Schema metadata is including when writing a package.</p>
+<div id="access" class="section level3">
+<h3>Access</h3>
+<p><code>schema()</code> gets the schema from a resource:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(frictionless)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>package <span class="ot">&lt;-</span> <span class="fu">example_package</span>()</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co"># Get the Table Schema for the resource &quot;observations&quot;</span></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>schema <span class="ot">&lt;-</span> <span class="fu">get_schema</span>(package, <span class="st">&quot;observations&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>schema <span class="ot">&lt;-</span> <span class="fu">schema</span>(package, <span class="st">&quot;observations&quot;</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">str</span>(schema)</span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="co">#&gt; List of 4</span></span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="co">#&gt;  $ fields       :List of 7</span></span>
@@ -403,25 +403,34 @@ package.</p>
 <span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
 <span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 2</span></span>
 <span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ required: logi FALSE</span></span>
-<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum    : chr [1:5] &quot;adult&quot; &quot;subadult&quot; &quot;juvenile&quot; &quot;offspring&quot; ...</span></span>
-<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 3</span></span>
-<span id="cb1-44"><a href="#cb1-44" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;comments&quot;</span></span>
-<span id="cb1-45"><a href="#cb1-45" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
-<span id="cb1-46"><a href="#cb1-46" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 1</span></span>
-<span id="cb1-47"><a href="#cb1-47" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ required: logi FALSE</span></span>
-<span id="cb1-48"><a href="#cb1-48" tabindex="-1"></a><span class="co">#&gt;  $ missingValues: chr [1:3] &quot;&quot; &quot;NA&quot; &quot;NaN&quot;</span></span>
-<span id="cb1-49"><a href="#cb1-49" tabindex="-1"></a><span class="co">#&gt;  $ primaryKey   : chr &quot;observation_id&quot;</span></span>
-<span id="cb1-50"><a href="#cb1-50" tabindex="-1"></a><span class="co">#&gt;  $ foreignKeys  :List of 1</span></span>
-<span id="cb1-51"><a href="#cb1-51" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 2</span></span>
-<span id="cb1-52"><a href="#cb1-52" tabindex="-1"></a><span class="co">#&gt;   .. ..$ fields   : chr &quot;deployment_id&quot;</span></span>
-<span id="cb1-53"><a href="#cb1-53" tabindex="-1"></a><span class="co">#&gt;   .. ..$ reference:List of 2</span></span>
-<span id="cb1-54"><a href="#cb1-54" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ resource: chr &quot;deployments&quot;</span></span>
-<span id="cb1-55"><a href="#cb1-55" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ fields  : chr &quot;deployment_id&quot;</span></span></code></pre></div>
-<p><code>read_resource()</code> uses <code>schema$fields</code> to parse
-the names and data types of the columns in a tabular data file. For
-example, the third field in the schema (<code>timestamp</code>) is
-defined as a datetime <code>type</code> with a specific
-<code>format</code>:</p>
+<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum    :List of 5</span></span>
+<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;adult&quot;</span></span>
+<span id="cb1-44"><a href="#cb1-44" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;subadult&quot;</span></span>
+<span id="cb1-45"><a href="#cb1-45" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;juvenile&quot;</span></span>
+<span id="cb1-46"><a href="#cb1-46" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;offspring&quot;</span></span>
+<span id="cb1-47"><a href="#cb1-47" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;unknown&quot;</span></span>
+<span id="cb1-48"><a href="#cb1-48" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 3</span></span>
+<span id="cb1-49"><a href="#cb1-49" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;comments&quot;</span></span>
+<span id="cb1-50"><a href="#cb1-50" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
+<span id="cb1-51"><a href="#cb1-51" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 1</span></span>
+<span id="cb1-52"><a href="#cb1-52" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ required: logi FALSE</span></span>
+<span id="cb1-53"><a href="#cb1-53" tabindex="-1"></a><span class="co">#&gt;  $ missingValues:List of 1</span></span>
+<span id="cb1-54"><a href="#cb1-54" tabindex="-1"></a><span class="co">#&gt;   ..$ : chr &quot;NA&quot;</span></span>
+<span id="cb1-55"><a href="#cb1-55" tabindex="-1"></a><span class="co">#&gt;  $ primaryKey   : chr &quot;observation_id&quot;</span></span>
+<span id="cb1-56"><a href="#cb1-56" tabindex="-1"></a><span class="co">#&gt;  $ foreignKeys  :List of 1</span></span>
+<span id="cb1-57"><a href="#cb1-57" tabindex="-1"></a><span class="co">#&gt;   ..$ :List of 2</span></span>
+<span id="cb1-58"><a href="#cb1-58" tabindex="-1"></a><span class="co">#&gt;   .. ..$ fields   : chr &quot;deployment_id&quot;</span></span>
+<span id="cb1-59"><a href="#cb1-59" tabindex="-1"></a><span class="co">#&gt;   .. ..$ reference:List of 2</span></span>
+<span id="cb1-60"><a href="#cb1-60" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ resource: chr &quot;deployments&quot;</span></span>
+<span id="cb1-61"><a href="#cb1-61" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ fields  : chr &quot;deployment_id&quot;</span></span></code></pre></div>
+</div>
+<div id="read" class="section level3">
+<h3>Read</h3>
+<p><code>read_resource()</code> uses the information in
+<code>schema$fields</code> to parse the names and data types of the
+columns in a tabular data file. For example, the third field in the
+schema above (<code>timestamp</code>) is defined as a datetime
+<code>type</code> with a specific <code>format</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">str</span>(schema<span class="sc">$</span>fields[[<span class="dv">3</span>]])</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; List of 4</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;  $ name       : chr &quot;timestamp&quot;</span></span>
@@ -446,7 +455,12 @@ defined as one of its <code>constraints</code>:</p>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;  $ type       : chr &quot;string&quot;</span></span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt;  $ constraints:List of 2</span></span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt;   ..$ required: logi FALSE</span></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;   ..$ enum    : chr [1:5] &quot;adult&quot; &quot;subadult&quot; &quot;juvenile&quot; &quot;offspring&quot; ...</span></span></code></pre></div>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt;   ..$ enum    :List of 5</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt;   .. ..$ : chr &quot;adult&quot;</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt;   .. ..$ : chr &quot;subadult&quot;</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt;   .. ..$ : chr &quot;juvenile&quot;</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co">#&gt;   .. ..$ : chr &quot;offspring&quot;</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co">#&gt;   .. ..$ : chr &quot;unknown&quot;</span></span></code></pre></div>
 <p><code>read_resource()</code> uses that information to parse the
 column as a factor, using <code>enum</code> as the factor levels:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">class</span>(observations<span class="sc">$</span>life_stage)</span>
@@ -459,7 +473,7 @@ column as a factor, using <code>enum</code> as the factor levels:</p>
 <p>A schema is a list which you can manipulate, but frictionless does
 not provide functions to do that. Use <code>{purrr}</code> or base R
 instead (see <code>vignette(&quot;frictionless&quot;)</code>). You do not have to
-start a schema from scratch though: use <code>get_schema()</code> (see
+start a schema from scratch though: use <code>schema()</code> (see
 above) or <code>create_schema()</code> instead.</p>
 <p><code>create_schema()</code> creates a schema from a data frame and
 defines the <code>name</code>, <code>type</code> (and if a factor
@@ -485,7 +499,10 @@ defines the <code>name</code>, <code>type</code> (and if a factor
 <span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;   .. ..$ name       : chr &quot;Species&quot;</span></span>
 <span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt;   .. ..$ type       : chr &quot;string&quot;</span></span>
 <span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;   .. ..$ constraints:List of 1</span></span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum: chr [1:3] &quot;setosa&quot; &quot;versicolor&quot; &quot;virginica&quot;</span></span></code></pre></div>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt;   .. .. ..$ enum:List of 3</span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;setosa&quot;</span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;versicolor&quot;</span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt;   .. .. .. ..$ : chr &quot;virginica&quot;</span></span></code></pre></div>
 <p><code>add_resource()</code> allows to include the schema with a
 resource. If no schema is provided, one is created with
 <code>create_schema()</code>:</p>
@@ -639,7 +656,7 @@ follows:</p>
 </tr>
 <tr class="odd">
 <td>undefined</td>
-<td>guessed</td>
+<td><code>character</code></td>
 </tr>
 </tbody>
 </table>
@@ -768,9 +785,9 @@ most occurring one is selected.</li>
 <div id="integer" class="section level3">
 <h3>integer</h3>
 <p><a href="https://specs.frictionlessdata.io/table-schema/#integer"><code>integer</code></a>
-is interpreted as <code>double</code> (to avoid issues with big
-numbers). Or <code>factor</code> when <code>constraints$enum</code> is
-defined.</p>
+is interpreted as <code>double</code> (to support big integers, + signs
+and <code>bareNumber</code>). Or <code>factor</code> when
+<code>constraints$enum</code> is defined.</p>
 <ul>
 <li><code>bareNumber</code> is supported. If <code>false</code>,
 whitespace and non-numeric characters are ignored.</li>
