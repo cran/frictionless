@@ -1,3 +1,4 @@
+# Return ----
 test_that("check_path() returns path prepended with directory", {
   skip_if_offline()
   expect_identical(
@@ -19,18 +20,19 @@ test_that("check_path() returns path prepended with directory", {
   expect_identical(check_path(url, directory = "data"), url)
 })
 
+# Error handling ----
 test_that("check_path() returns error on absolute path when safe = TRUE", {
   expect_error(
     check_path("/dir/file.txt", safe = TRUE),
     class = "frictionless_error_path_unsafe_absolute"
   )
   expect_error(
-    frictionless:::check_path("/dir/file.txt", safe = TRUE),
+    check_path("/dir/file.txt", safe = TRUE),
     regexp = "`path` must be a safe path.",
     fixed = TRUE
   )
   expect_error(
-    frictionless:::check_path("/dir/file.txt", safe = TRUE),
+    check_path("/dir/file.txt", safe = TRUE),
     regexp = paste(
       "'/dir/file.txt' is an absolute path starting with \"/\" which is unsafe."
     ),
@@ -56,6 +58,23 @@ test_that("check_path() returns error on relative parent path when safe =
       "is unsafe."
     ),
     fixed = TRUE
+  )
+})
+
+test_that("check_path() returns error on path containing hidden folder when safe
+           = TRUE", {
+  # R CMD check returns NOTE on hidden files, so none are stored for this test.
+  expect_error(
+    check_path(".hidden_dir/file.txt", safe = TRUE),
+    class = "frictionless_error_path_unsafe_hidden"
+  )
+  expect_error(
+    check_path("dir/.hidden_dir/file.txt", safe = TRUE),
+    class = "frictionless_error_path_unsafe_hidden"
+  )
+  expect_error(
+    check_path("dir/.hidden_file.txt", safe = TRUE), # Hidden file path ok
+    class = "frictionless_error_path_not_found" # But it does not exist
   )
 })
 

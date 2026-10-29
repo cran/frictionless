@@ -2,9 +2,9 @@
 
 #' Get unique vector values sorted by how often they occur
 #'
-#' @param x Vector, e.g. `c("a", "b", "b", "b", "c", "a")`.
-#' @returns Vector with unique values sorted by most to least occurring,
-#'   e.g. `c("b", "a", "c")`.
+#' @param x Vector (e.g. `c("a", "b", "b", "b", "c", "a")`).
+#' @returns Vector with unique values sorted by most to least occurring
+#'   (e.g. `c("b", "a", "c")`).
 #' @family helper functions
 #' @noRd
 unique_sorted <- function(x) {
@@ -18,8 +18,8 @@ unique_sorted <- function(x) {
 
 #' Clean list
 #'
-#' Removes all elements from a list that meet a criterion function, e.g.
-#' [is.null()] for empty elements.
+#' Removes all elements from a list that meet a criterion function (e.g.
+#' [is.null()] for empty elements).
 #' Removal can be recursive to guarantee elements are removed at any level.
 #' Function is copied and adapted from `rlist::list.clean()` (MIT licensed), to
 #' avoid requiring full `rlist` dependency.
@@ -41,6 +41,16 @@ clean_list <- function(x, fun = is.null, recursive = FALSE) {
     })
   }
   "[<-"(x, vapply(x, fun, logical(1L)), NULL)
+}
+
+#' Convert character to list
+#'
+#' @param x Value, e.g `"a"`.
+#' @returns List containing value (`list("a")`) if character, otherwise value.
+#' @family helper functions
+#' @noRd
+character_to_list <- function(x) {
+  if (is.character(x)) as.list(x) else x
 }
 
 #' Check if path is URL
@@ -77,16 +87,22 @@ read_descriptor <- function(x, directory = NULL, safe = FALSE) {
   }
 }
 
-#' Get names of arguments passed to ellipsis
+#' Check if arguments passed to dots are named
 #'
-#' Replicates the base function [...names()] available in R >= 4.0.0.
-#'
-#' @param ... objects, possibly named
-#' @returns A character vector of the names of the ... arguments
+#' @param ... Arguments passed to dots.
+#' @returns List with named dots arguments or error.
 #' @noRd
-get_dot_names <- function(...) {
-  # Get all the names from ...
-  dot_names <- names(list(...))
-  # Return the names that are not an empty string (no name set)
-  return(dot_names[dot_names != ""])
+check_dots <- function(...) {
+  dots <- rlang::list2(...)
+  named_dots <- dots[names(dots) != ""]
+
+  # Check all ... arguments are named
+  if (length(dots) != length(named_dots)) {
+    cli::cli_abort(
+      "All arguments in {.arg ...} must be named.",
+      class = "frictionless_error_dots_argument_unnamed"
+    )
+  }
+
+  return(named_dots)
 }

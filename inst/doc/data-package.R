@@ -6,7 +6,7 @@ knitr::opts_chunk$set(
 
 ## -----------------------------------------------------------------------------
 library(frictionless)
-file <- system.file("extdata", "v1", "datapackage.json", package = "frictionless")
+file <- system.file("extdata", "v2", "datapackage.json", package = "frictionless")
 package <- read_package(file)
 
 ## -----------------------------------------------------------------------------
@@ -22,13 +22,25 @@ create_package()
 # From an existing package
 create_package(package)
 
+## -----------------------------------------------------------------------------
+my_package <- create_package()
+my_package <- add_properties(
+  my_package,
+  title = "My package",
+  keywords = c("minimal", "frictionlessdata"),
+  after = 1 # Add after the first property
+)
+str(my_package)
+
 ## ----message = FALSE----------------------------------------------------------
-library(dplyr) # Or library(magrittr)
 my_package <-
   create_package() |>
-  add_resource(resource_name = "iris", data = iris) |>
-  append(c("title" = "my_package"), after = 0) |>
-  create_package() # To add the datapackage class again
+  add_properties(
+    title = "My package",
+    keywords = c("minimal", "frictionlessdata"),
+    after = 0
+  ) |>
+  add_resource(resource_name = "iris", data = iris)
 my_package
 
 ## -----------------------------------------------------------------------------

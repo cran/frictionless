@@ -6,7 +6,7 @@
 \alias{frictionless-package}
 \title{frictionless: Read and Write Frictionless Data Packages}
 \description{
-Read and write Frictionless Data Packages. A 'Data Package' (\url{https://specs.frictionlessdata.io/data-package/}) is a simple container format and standard to describe and package a collection of (tabular) data. It is typically used to publish FAIR (\url{https://www.go-fair.org/fair-principles/}) and open datasets.
+Read and write Frictionless Data Packages. A 'Data Package' (\url{https://datapackage.org/}) is a simple container format and standard to describe and package a collection of (tabular) data. It is typically used to publish FAIR (\url{https://www.gofair.foundation/fair-principles}) and open datasets.
 }
 \seealso{
 Useful links:
@@ -33,6 +33,7 @@ Other contributors:
   \item Kyle Husmann \email{kdh38@psu.edu} (\href{https://orcid.org/0000-0001-9875-8976}{ORCID}) (affiliation: Pennsylvania State University) [contributor]
   \item Research Institute for Nature and Forest (INBO) (\href{https://ror.org/00j54wy13}{ROR}) [copyright holder]
   \item Research Foundation - Flanders (https://lifewatch.be) [funder]
+  \item NLnet foundation (https://nlnet.nl/project/Frictionless-Libs/) [funder]
   \item Beatriz Milz \email{milz.bea@gmail.com} (\href{https://orcid.org/0000-0002-3064-4486}{ORCID}) [reviewer]
   \item João Martins \email{joao.martins@gmx.net} (\href{https://orcid.org/0000-0001-7961-4280}{ORCID}) [reviewer]
 }

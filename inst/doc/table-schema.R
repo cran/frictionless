@@ -32,6 +32,13 @@ iris_schema <- create_schema(iris)
 str(iris_schema)
 
 ## -----------------------------------------------------------------------------
+iris_schema <- add_properties(
+  iris_schema,
+  title = "Table schema for iris",
+  after = 1 # Add after the first property
+)
+
+## -----------------------------------------------------------------------------
 package <- add_resource(
   package,
   resource_name = "iris",

@@ -45,22 +45,20 @@ Will be set as \code{delimiter} in the resource Table Dialect, so read functions
 know how to read the file(s).
 Ignored if \code{data} is a data frame.}
 
-\item{...}{Additional \href{https://docs.ropensci.org/frictionless/articles/data-resource.html#properties-implementation}{metadata properties}
-to add to the resource, e.g. \verb{title = "My title", validated = FALSE}.
-These are not verified against specifications and are ignored by
+\item{...}{Additional \href{https://datapackage.org/standard/data-resource/#properties}{metadata properties} to add to the
+resource.
+Note that added properties are not validated and ignored by
 \code{\link[=read_resource]{read_resource()}}.
 The following properties are automatically set and can't be provided with
-\code{...}: \code{name}, \code{data}, \code{path}, \code{schema}, \code{profile}, \code{format}, \code{mediatype},
-\code{encoding} and \code{dialect}.}
+\code{...}: \verb{$schema}, \code{name}, \code{path}, \code{data}, \code{type}, \code{format}, \code{mediatype},
+\code{encoding}, \code{dialect} and \code{schema}.}
 }
 \value{
 \code{package} with one additional resource.
 }
 \description{
 Adds a Data Resource to a Data Package.
-The resource will be a \href{https://specs.frictionlessdata.io/tabular-data-resource/}{Tabular Data Resource}.
-The resource name can only contain lowercase alphanumeric characters plus
-\code{.}, \code{-} and \verb{_}.
+The resource will be a \href{https://datapackage.org/standard/data-resource/#tabular}{Tabular Data Resource}.
 }
 \details{
 See \code{vignette("data-resource")} (and to a lesser extend
@@ -115,6 +113,7 @@ resource_names(package)
 }
 \seealso{
 Other edit functions:
+\code{\link[=add_properties]{add_properties()}},
 \code{\link[=remove_resource]{remove_resource()}}
 }
 \concept{edit functions}
